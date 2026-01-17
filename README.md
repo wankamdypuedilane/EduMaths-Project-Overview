@@ -1,7 +1,5 @@
 # EduMaths Project Overview
 
-This is a code bundle for EduMaths Project Overview. The original project is available at https://www.figma.com/design/lAJ7iGxjaIIpwPAAQq8yKT/EduMaths-Project-Overview.
-
 ## Running the code
 
 Run `npm i` to install the dependencies.
