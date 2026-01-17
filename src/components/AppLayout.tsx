@@ -1,6 +1,13 @@
-import { ReactNode } from 'react';
-import { useNavigate, useLocation } from 'react-router';
-import { Home, TrendingUp, MessageSquare, UserCircle, LogOut, Calculator } from 'lucide-react';
+import { ReactNode } from "react";
+import { useNavigate, useLocation } from "react-router";
+import {
+  Home,
+  TrendingUp,
+  MessageSquare,
+  UserCircle,
+  LogOut,
+  Calculator,
+} from "lucide-react";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -12,15 +19,20 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
   const location = useLocation();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Accueil', icon: Home, path: '/dashboard' },
-    { id: 'progression', label: 'Progression', icon: TrendingUp, path: '/progression' },
-    { id: 'tutor', label: 'Tuteur IA', icon: MessageSquare, path: '/tutor' },
-    { id: 'profile', label: 'Profil', icon: UserCircle, path: '/profile' },
+    { id: "dashboard", label: "Accueil", icon: Home, path: "/dashboard" },
+    {
+      id: "progression",
+      label: "Progression",
+      icon: TrendingUp,
+      path: "/progression",
+    },
+    { id: "tutor", label: "Tuteur IA", icon: MessageSquare, path: "/tutor" },
+    { id: "profile", label: "Profil", icon: UserCircle, path: "/profile" },
   ];
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -29,7 +41,10 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
+          <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => navigate("/dashboard")}
+          >
             <div className="bg-indigo-600 w-10 h-10 rounded-lg flex items-center justify-center">
               <Calculator className="w-6 h-6 text-white" />
             </div>
@@ -42,15 +57,16 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
           <div className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activePage === item.id || location.pathname === item.path;
+              const isActive =
+                activePage === item.id || location.pathname === item.path;
               return (
                 <button
                   key={item.id}
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                  className={`w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                     isActive
-                      ? 'bg-indigo-100 text-indigo-600'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? "bg-indigo-100 text-indigo-600"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -65,7 +81,7 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
         <div className="p-4 border-t border-gray-200">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
+            className="w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
           >
             <LogOut className="w-5 h-5" />
             <span className="font-medium">Déconnexion</span>
@@ -74,9 +90,7 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
-        {children}
-      </div>
+      <div className="flex-1 overflow-y-auto">{children}</div>
     </div>
   );
 }

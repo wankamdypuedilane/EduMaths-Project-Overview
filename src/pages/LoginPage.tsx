@@ -65,7 +65,7 @@ export function LoginPage() {
             <div className="text-right">
               <button
                 type="button"
-                className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                className=" cursor-pointer text-sm text-indigo-600 hover:text-indigo-700 font-medium"
               >
                 Mot de passe oublié ?
               </button>
@@ -73,7 +73,7 @@ export function LoginPage() {
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-lg"
+              className=" cursor-pointer w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-lg"
             >
               Se connecter
             </button>
@@ -90,7 +90,7 @@ export function LoginPage() {
 
           {/* Social Login */}
           <div className="space-y-3 mb-6">
-            <button className="w-full bg-white border-2 border-gray-300 h-12 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-all">
+            <button className=" cursor-pointer w-full bg-white border-2 border-gray-300 h-12 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-all">
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
@@ -112,7 +112,7 @@ export function LoginPage() {
               <span className="text-gray-700 font-medium">Google</span>
             </button>
 
-            <button className="w-full bg-black h-12 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-900 transition-all">
+            <button className=" cursor-pointer w-full bg-black h-12 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-900 transition-all">
               <svg
                 className="w-5 h-5 text-white"
                 fill="currentColor"
@@ -128,7 +128,7 @@ export function LoginPage() {
             <span className="text-gray-600">Pas encore de compte ? </span>
             <button
               onClick={() => navigate("/signup")}
-              className="text-indigo-600 font-semibold hover:text-indigo-700"
+              className=" cursor-pointer text-indigo-600 font-semibold hover:text-indigo-700"
             >
               S'inscrire
             </button>

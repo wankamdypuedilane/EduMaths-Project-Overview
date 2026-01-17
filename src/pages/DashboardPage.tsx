@@ -98,7 +98,7 @@ export function DashboardPage() {
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => navigate(`/classes/${selectedClassId}/chapters`)}
-              className="bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl p-6 text-left text-white hover:shadow-lg transition-all"
+              className="cursor-pointer bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl p-6 text-left text-white hover:shadow-lg transition-all"
             >
               <BookOpen className="w-8 h-8 mb-3" />
               <h3 className="font-semibold text-lg mb-1">Formules</h3>
@@ -107,7 +107,7 @@ export function DashboardPage() {
 
             <button
               onClick={() => navigate(`/classes/${selectedClassId}/chapters`)}
-              className="bg-gradient-to-br from-green-500 to-teal-500 rounded-xl p-6 text-left text-white hover:shadow-lg transition-all"
+              className="cursor-pointer bg-gradient-to-br from-green-500 to-teal-500 rounded-xl p-6 text-left text-white hover:shadow-lg transition-all"
             >
               <Atom className="w-8 h-8 mb-3" />
               <h3 className="font-semibold text-lg mb-1">Exercices</h3>

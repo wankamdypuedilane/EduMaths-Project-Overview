@@ -51,7 +51,7 @@ export function ExercisesPage() {
           {/* Bouton pour aller voir les formules du même chapitre */}
           <button
             onClick={() => navigate(`/chapters/${chapterId}/formulas`)}
-            className="bg-indigo-100 text-indigo-600 px-6 py-3 rounded-xl font-semibold hover:bg-indigo-200 transition-all inline-flex items-center gap-2"
+            className=" cursor-pointer bg-indigo-100 text-indigo-600 px-6 py-3 rounded-xl font-semibold hover:bg-indigo-200 transition-all inline-flex items-center gap-2"
           >
             <BookOpen className="w-5 h-5" />
             Voir le cours
@@ -93,7 +93,7 @@ export function ExercisesPage() {
                               </h3>
                               <span
                                 className={`px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(
-                                  difficulty
+                                  difficulty,
                                 )}`}
                               >
                                 {difficulty.charAt(0).toUpperCase() +
@@ -108,7 +108,7 @@ export function ExercisesPage() {
                             onClick={() =>
                               navigate(`/exercises/${exercise.id}`)
                             }
-                            className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all ml-6"
+                            className=" cursor-pointer bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all ml-6"
                           >
                             Démarrer
                           </button>

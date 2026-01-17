@@ -36,7 +36,7 @@ export function ProfilePage() {
                 {user?.name}
               </h2>
               <p className="text-gray-600 mb-3">{user?.email}</p>
-              <button className="text-indigo-600 font-semibold hover:text-indigo-700">
+              <button className=" cursor-pointer text-indigo-600 font-semibold hover:text-indigo-700">
                 Modifier la photo
               </button>
             </div>
@@ -52,7 +52,7 @@ export function ProfilePage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-300 rounded-lg h-12 px-4 outline-none focus:ring-2 focus:ring-indigo-600"
+                className=" cursor-pointer w-full bg-gray-50 border border-gray-300 rounded-lg h-12 px-4 outline-none focus:ring-2 focus:ring-indigo-600"
               />
             </div>
 
@@ -73,7 +73,7 @@ export function ProfilePage() {
         {/* Save Button */}
         <button
           onClick={handleSave}
-          className="w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 transition-all mb-6"
+          className=" cursor-pointer w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 transition-all mb-6"
         >
           Enregistrer les modifications
         </button>
@@ -91,7 +91,7 @@ export function ProfilePage() {
               </div>
               <button
                 onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-                className={`w-12 h-6 rounded-full relative transition-all ${
+                className={` cursor-pointer w-12 h-6 rounded-full relative transition-all ${
                   notificationsEnabled ? "bg-indigo-600" : "bg-gray-300"
                 }`}
               >
@@ -110,7 +110,7 @@ export function ProfilePage() {
               </div>
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className={`w-12 h-6 rounded-full relative transition-all ${
+                className={` cursor-pointer w-12 h-6 rounded-full relative transition-all ${
                   darkMode ? "bg-indigo-600" : "bg-gray-300"
                 }`}
               >
@@ -125,7 +125,7 @@ export function ProfilePage() {
         </div>
 
         {/* Delete Account Button */}
-        <button className="w-full bg-white border-2 border-red-600 text-red-600 h-12 rounded-xl font-semibold hover:bg-red-50 transition-all">
+        <button className=" cursor-pointer w-full bg-white border-2 border-red-600 text-red-600 h-12 rounded-xl font-semibold hover:bg-red-50 transition-all">
           Supprimer mon compte
         </button>
       </div>

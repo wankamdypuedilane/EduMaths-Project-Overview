@@ -137,7 +137,7 @@ export function ExercisePage() {
                 disabled={!answer.trim()}
                 className={`w-full h-12 rounded-xl flex items-center justify-center shadow-lg transition-all ${
                   answer.trim()
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                    ? " cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
@@ -147,7 +147,7 @@ export function ExercisePage() {
               // Bouton Continuer : remplace le bouton valider après la réponse
               <button
                 onClick={() => navigate("/chapters")}
-                className="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-900 transition-all"
+                className=" cursor-pointer w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-900 transition-all"
               >
                 <span className="text-gray-700 font-semibold">
                   Continuer vers les chapitres
@@ -157,7 +157,7 @@ export function ExercisePage() {
 
             <button
               onClick={() => navigate(-1)}
-              className="w-full bg-white border-2 border-gray-300 h-12 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-all"
+              className=" cursor-pointer w-full bg-white border-2 border-gray-300 h-12 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-all"
             >
               <span className="text-gray-700 font-semibold">Retour</span>
             </button>

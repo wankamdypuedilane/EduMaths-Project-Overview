@@ -114,7 +114,7 @@ export function SolutionPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => navigate(`/exercises/${exercise.id}`)}
-              className="flex-1 bg-gray-100 text-gray-700 px-6 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+              className=" cursor-pointer flex-1 bg-gray-100 text-gray-700 px-6 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
             >
               <RotateCcw className="w-5 h-5" />
               Réessayer
@@ -123,11 +123,11 @@ export function SolutionPage() {
             <button
               onClick={() => {
                 const currentIndex = exercisesData.findIndex(
-                  (e) => e.id === exerciseId
+                  (e) => e.id === exerciseId,
                 );
                 const nextExercise = exercisesData.find(
                   (e, index) =>
-                    index > currentIndex && e.chapterId === exercise.chapterId
+                    index > currentIndex && e.chapterId === exercise.chapterId,
                 );
 
                 if (nextExercise) {
@@ -136,7 +136,7 @@ export function SolutionPage() {
                   navigate(`/chapters/${exercise.chapterId}/exercises`);
                 }
               }}
-              className="flex-1 bg-indigo-600 text-white px-6 py-4 rounded-2xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2"
+              className=" cursor-pointer flex-1 bg-indigo-600 text-white px-6 py-4 rounded-2xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2"
             >
               Suivant
               <ArrowRight className="w-5 h-5" />

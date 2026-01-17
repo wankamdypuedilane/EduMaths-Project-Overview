@@ -32,7 +32,7 @@ export function FormulasPage() {
         <div className="max-w-4xl mx-auto">
           <button
             onClick={() => navigate("/chapters")}
-            className="text-white/80 hover:text-white mb-4 flex items-center gap-2 transition-colors"
+            className=" cursor-pointer text-white/80 hover:text-white mb-4 flex items-center gap-2 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Retour aux chapitres
           </button>
@@ -48,7 +48,7 @@ export function FormulasPage() {
           <div className="mt-6 text-center">
             <button
               onClick={() => navigate(`/chapters/${chapterId}/exercises`)}
-              className="bg-white text-indigo-600 px-8 py-3 rounded-xl font-bold hover:shadow-lg transition-all inline-flex items-center gap-2"
+              className=" cursor-pointer bg-white text-indigo-600 px-8 py-3 rounded-xl font-bold hover:shadow-lg transition-all inline-flex items-center gap-2"
             >
               <Atom className="w-5 h-5" />
               S'entraîner avec les exercices
