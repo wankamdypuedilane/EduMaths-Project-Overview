@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
 
 interface ExerciseProgress {
   exerciseId: string;
@@ -25,93 +26,231 @@ interface Activity {
 
 interface StreakData {
   currentStreak: number;
-  lastActivityDate: string; // Format YYYY-MM-DD
+  lastActivityDate: string; // YYYY-MM-DD
 }
+
+interface ExerciseProgressRow {
+  user_id: string;
+  chapter_id: string;
+  exercise_id: string;
+  score: number;
+  attempts: number;
+  completed: boolean;
+  last_attempt: string;
+}
+
+const toDate = (value: string | Date): Date =>
+  value instanceof Date ? value : new Date(value);
+
+const computeStreak = (existing?: StreakData | null): StreakData => {
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+
+  if (!existing) {
+    return { currentStreak: 1, lastActivityDate: today };
+  }
+
+  if (existing.lastActivityDate === today) {
+    return existing;
+  }
+
+  if (existing.lastActivityDate === yesterday) {
+    return {
+      currentStreak: existing.currentStreak + 1,
+      lastActivityDate: today,
+    };
+  }
+
+  return { currentStreak: 1, lastActivityDate: today };
+};
 
 export function useProgress(userId?: string) {
   const [progress, setProgress] = useState<ChapterProgress[]>([]);
   const [loading, setLoading] = useState(true);
+  const [streak, setStreak] = useState<StreakData | null>(null);
 
   useEffect(() => {
-    // Charger la progression depuis localStorage (temporaire)
-    // TODO: Charger depuis Supabase
-    const storedProgress = localStorage.getItem("userProgress");
-    if (storedProgress) {
-      setProgress(JSON.parse(storedProgress));
+    if (!userId) {
+      setProgress([]);
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    let active = true;
+
+    const fetchProgress = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("exercise_progress")
+        .select(
+          "user_id, chapter_id, exercise_id, score, attempts, completed, last_attempt",
+        )
+        .eq("user_id", userId);
+
+      if (!active) return;
+
+      if (error) {
+        console.error("Supabase progress fetch error", error);
+        setLoading(false);
+        return;
+      }
+
+      const map = new Map<string, ChapterProgress>();
+
+      (data || []).forEach((row: ExerciseProgressRow) => {
+        const existingChapter = map.get(row.chapter_id) || {
+          chapterId: row.chapter_id,
+          completion: 0,
+          exercises: [],
+        };
+
+        const exercises = [
+          ...existingChapter.exercises,
+          {
+            exerciseId: row.exercise_id,
+            completed: row.completed,
+            score: row.score,
+            attempts: row.attempts,
+            lastAttempt: toDate(row.last_attempt),
+          },
+        ];
+
+        const completedCount = exercises.filter((ep) => ep.completed).length;
+        const completion = Math.round(
+          (completedCount / exercises.length) * 100,
+        );
+
+        map.set(row.chapter_id, {
+          ...existingChapter,
+          exercises,
+          completion,
+        });
+      });
+
+      setProgress(Array.from(map.values()));
+      setLoading(false);
+    };
+
+    const fetchStreak = async () => {
+      const { data, error } = await supabase
+        .from("streaks")
+        .select("user_id, current_streak, last_activity_date")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (!active) return;
+
+      if (error && error.code !== "PGRST116") {
+        console.error("Supabase streak fetch error", error);
+        return;
+      }
+
+      if (data) {
+        setStreak({
+          currentStreak: data.current_streak,
+          lastActivityDate: data.last_activity_date,
+        });
+      }
+    };
+
+    fetchProgress();
+    fetchStreak();
+
+    return () => {
+      active = false;
+    };
   }, [userId]);
 
-  const getStreak = (): number => {
-    const streakData = localStorage.getItem("userStreak");
-    if (!streakData) return 0;
-
-    const { currentStreak, lastActivityDate }: StreakData =
-      JSON.parse(streakData);
-    const today = new Date().toISOString().split("T")[0];
-    const yesterday = new Date(Date.now() - 86400000)
-      .toISOString()
-      .split("T")[0];
-
-    // Si la dernière activité était aujourd'hui ou hier, on garde le streak
-    if (lastActivityDate === today || lastActivityDate === yesterday) {
-      return currentStreak;
+  const persistStreak = async () => {
+    if (!userId) return;
+    const next = computeStreak(streak);
+    setStreak(next);
+    const { error } = await supabase.from("streaks").upsert({
+      user_id: userId,
+      current_streak: next.currentStreak,
+      last_activity_date: next.lastActivityDate,
+    });
+    if (error) {
+      console.error("Supabase streak upsert error", error);
     }
-
-    // Sinon, le streak est cassé
-    return 0;
   };
 
-  const updateStreak = () => {
-    const today = new Date().toISOString().split("T")[0];
-    const streakData = localStorage.getItem("userStreak");
+  const updateExerciseProgress = async (
+    chapterId: string,
+    exerciseId: string,
+    score: number,
+  ) => {
+    if (!userId) return;
 
-    if (!streakData) {
-      // Premier jour
-      localStorage.setItem(
-        "userStreak",
-        JSON.stringify({
-          currentStreak: 1,
-          lastActivityDate: today,
-        }),
-      );
-      return;
+    const newProgress = [...progress];
+    let chapterProgress = newProgress.find((cp) => cp.chapterId === chapterId);
+
+    if (!chapterProgress) {
+      chapterProgress = {
+        chapterId,
+        completion: 0,
+        exercises: [],
+      };
+      newProgress.push(chapterProgress);
     }
 
-    const { currentStreak, lastActivityDate }: StreakData =
-      JSON.parse(streakData);
-    const yesterday = new Date(Date.now() - 86400000)
-      .toISOString()
-      .split("T")[0];
+    const exerciseProgress = chapterProgress.exercises.find(
+      (ep) => ep.exerciseId === exerciseId,
+    );
 
-    if (lastActivityDate === today) {
-      // Déjà compté aujourd'hui
-      return;
-    } else if (lastActivityDate === yesterday) {
-      // Continuation du streak
-      localStorage.setItem(
-        "userStreak",
-        JSON.stringify({
-          currentStreak: currentStreak + 1,
-          lastActivityDate: today,
-        }),
-      );
+    const now = new Date();
+    const attempts = exerciseProgress ? exerciseProgress.attempts + 1 : 1;
+    const bestScore = exerciseProgress
+      ? Math.max(exerciseProgress.score, score)
+      : score;
+    const completed = bestScore >= 50;
+
+    if (exerciseProgress) {
+      exerciseProgress.score = bestScore;
+      exerciseProgress.attempts = attempts;
+      exerciseProgress.lastAttempt = now;
+      exerciseProgress.completed = completed;
     } else {
-      // Streak cassé, recommencer à 1
-      localStorage.setItem(
-        "userStreak",
-        JSON.stringify({
-          currentStreak: 1,
-          lastActivityDate: today,
-        }),
-      );
+      chapterProgress.exercises.push({
+        exerciseId,
+        completed,
+        score: bestScore,
+        attempts,
+        lastAttempt: now,
+      });
+    }
+
+    const completedExercises = chapterProgress.exercises.filter(
+      (ep) => ep.completed,
+    ).length;
+    chapterProgress.completion = Math.round(
+      (completedExercises / chapterProgress.exercises.length) * 100,
+    );
+
+    setProgress(newProgress);
+
+    const { error } = await supabase.from("exercise_progress").upsert({
+      user_id: userId,
+      chapter_id: chapterId,
+      exercise_id: exerciseId,
+      score: bestScore,
+      attempts,
+      completed,
+      last_attempt: now.toISOString(),
+    });
+
+    if (error) {
+      console.error("Supabase progress upsert error", error);
+    } else {
+      await persistStreak();
     }
   };
+
+  const getStreak = (): number => streak?.currentStreak || 0;
 
   const getRecentActivities = (): Activity[] => {
     const activities: Activity[] = [];
 
-    // Parcourir tous les exercices complétés et créer des activités
     progress.forEach((chapterProgress) => {
       chapterProgress.exercises.forEach((exercise) => {
         if (exercise.completed) {
@@ -130,65 +269,12 @@ export function useProgress(userId?: string) {
       });
     });
 
-    // Trier par date décroissante et prendre les 5 plus récentes
     return activities
       .sort(
         (a, b) =>
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
       )
       .slice(0, 5);
-  };
-
-  const updateExerciseProgress = (
-    chapterId: string,
-    exerciseId: string,
-    score: number,
-  ) => {
-    // TODO: Sauvegarder dans Supabase
-    const newProgress = [...progress];
-    let chapterProgress = newProgress.find((cp) => cp.chapterId === chapterId);
-
-    if (!chapterProgress) {
-      chapterProgress = {
-        chapterId,
-        completion: 0,
-        exercises: [],
-      };
-      newProgress.push(chapterProgress);
-    }
-
-    const exerciseProgress = chapterProgress.exercises.find(
-      (ep) => ep.exerciseId === exerciseId,
-    );
-
-    if (exerciseProgress) {
-      exerciseProgress.score = Math.max(exerciseProgress.score, score);
-      exerciseProgress.attempts += 1;
-      exerciseProgress.lastAttempt = new Date();
-      exerciseProgress.completed = score >= 50;
-    } else {
-      chapterProgress.exercises.push({
-        exerciseId,
-        completed: score >= 50,
-        score,
-        attempts: 1,
-        lastAttempt: new Date(),
-      });
-    }
-
-    // Calculer le pourcentage de complétion
-    const completedExercises = chapterProgress.exercises.filter(
-      (ep) => ep.completed,
-    ).length;
-    chapterProgress.completion = Math.round(
-      (completedExercises / chapterProgress.exercises.length) * 100,
-    );
-
-    setProgress(newProgress);
-    localStorage.setItem("userProgress", JSON.stringify(newProgress));
-
-    // Mettre à jour le streak
-    updateStreak();
   };
 
   const getChapterProgress = (chapterId: string) => {

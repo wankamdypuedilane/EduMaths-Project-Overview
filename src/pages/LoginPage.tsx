@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Calculator, Mail, Lock } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implémenter l'authentification avec Supabase
+    // Se connecter avec les vraies données
+    await login(email, password);
     navigate("/dashboard");
   };
 

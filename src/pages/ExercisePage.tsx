@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import exercisesData from "../data/exercises.json";
@@ -8,15 +8,23 @@ import { useProgress } from "../hooks/useProgress";
 export function ExercisePage() {
   const { exerciseId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { updateExerciseProgress, getExerciseProgress } = useProgress(user?.id);
 
   const [answer, setAnswer] = useState("");
   const [showSolution, setShowSolution] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const exercise = exercisesData.find((e) => e.id === exerciseId);
   const existingProgress = exercise ? getExerciseProgress(exercise.id) : null;
+
+  // Si non authentifié, on redirige vers la connexion
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/login");
+    }
+  }, [authLoading, user, navigate]);
 
   if (!exercise) {
     return (
@@ -28,8 +36,9 @@ export function ExercisePage() {
     );
   }
 
-  const handleValidate = () => {
-    if (!exercise) return;
+  const handleValidate = async () => {
+    if (!exercise || !user || saving) return;
+    setSaving(true);
 
     const userAns = answer.trim().toLowerCase();
     const correctAns = exercise.answer.toLowerCase();
@@ -40,11 +49,15 @@ export function ExercisePage() {
     // Calculer le score : 100 si correct, 0 si incorrect
     const score = correct ? 100 : 0;
 
-    // Sauvegarder la progression dans localStorage et state
-    updateExerciseProgress(exercise.chapterId, exercise.id, score);
+    try {
+      await updateExerciseProgress(exercise.chapterId, exercise.id, score);
+    } catch (err) {
+      console.error("Erreur en sauvegardant la progression", err);
+    }
 
     // On affiche la solution après avoir cliqué sur Valider
     setShowSolution(true);
+    setSaving(false);
   };
 
   return (
@@ -145,7 +158,7 @@ export function ExercisePage() {
               // Bouton Valider : visible au début
               <button
                 onClick={handleValidate}
-                disabled={!answer.trim()}
+                disabled={!answer.trim() || saving}
                 className={`w-full h-12 rounded-xl flex items-center justify-center shadow-lg transition-all ${
                   answer.trim()
                     ? " cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"

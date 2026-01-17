@@ -8,8 +8,10 @@ import chaptersData from "../data/chapters.json";
 
 export function ProgressionPage() {
   const { user } = useAuth();
-  const { progress, getTotalStats, getChapterProgress } = useProgress(user?.id);
+  const { progress, getTotalStats, getChapterProgress, getStreak } =
+    useProgress(user?.id);
   const stats = getTotalStats();
+  const streak = getStreak();
 
   return (
     <AppLayout activePage="progression">
@@ -30,7 +32,7 @@ export function ProgressionPage() {
           {/* Colonne de gauche : Stats et Badges */}
           <div className="lg:col-span-1 space-y-6">
             {/* Stats Grid - Version condensée */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center">
                 <div className="text-3xl font-black text-indigo-600 mb-1">
                   {stats.totalExercises}
@@ -45,6 +47,14 @@ export function ProgressionPage() {
                 </div>
                 <p className="text-xs font-bold text-gray-400 uppercase">
                   Succès
+                </p>
+              </div>
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center">
+                <div className="text-3xl font-black text-orange-500 mb-1">
+                  {streak}
+                </div>
+                <p className="text-xs font-bold text-gray-400 uppercase">
+                  Jour(s) de suite
                 </p>
               </div>
             </div>

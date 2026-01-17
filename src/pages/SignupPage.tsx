@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Calculator, Mail, Lock, User } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 export function SignupPage() {
   const navigate = useNavigate();
+  const { signup } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implémenter l'inscription avec Supabase
+    // Créer le compte avec les vraies données
+    await signup(name, email, password);
     navigate("/terms");
   };
 

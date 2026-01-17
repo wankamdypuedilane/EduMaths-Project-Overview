@@ -1,4 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import type {
+  AuthChangeEvent,
+  Session,
+  User as SupabaseUser,
+} from "@supabase/supabase-js";
+import { supabase } from "../lib/supabaseClient";
 
 interface User {
   id: string;
@@ -8,59 +14,125 @@ interface User {
   isFirstLogin: boolean;
 }
 
+const toUser = (supabaseUser?: SupabaseUser | null): User | null => {
+  if (!supabaseUser) return null;
+  const metadata = supabaseUser.user_metadata || {};
+
+  return {
+    id: supabaseUser.id,
+    name: metadata.name || supabaseUser.email || "Utilisateur",
+    email: supabaseUser.email || "",
+    classeId: metadata.classeId || "",
+    isFirstLogin: Boolean(metadata.isFirstLogin),
+  };
+};
+
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Vérifier si un utilisateur est connecté (localStorage pour l'instant)
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    let mounted = true;
+
+    const loadSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (!mounted) return;
+
+      if (error) {
+        console.error("Supabase session error", error);
+        setLoading(false);
+        return;
+      }
+
+      const activeUser = toUser(data.session?.user);
+
+      // Si pas de session Supabase, on ne charge plus l'ancien fallback local (car l'id n'est pas un uuid et bloque Supabase)
+      setUser(activeUser);
+      setLoading(false);
+    };
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event: AuthChangeEvent, session: Session | null) => {
+        setUser(toUser(session?.user));
+      },
+    );
+
+    loadSession();
+
+    return () => {
+      mounted = false;
+      authListener?.subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
-    // TODO: Implémenter avec Supabase
-    const mockUser: User = {
-      id: "1",
-      name: "Marie Jeanne",
+    setLoading(true);
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      classeId: "3eme",
-      isFirstLogin: false,
-    };
-    localStorage.setItem("user", JSON.stringify(mockUser));
-    setUser(mockUser);
-    return mockUser;
+      password,
+    });
+    setLoading(false);
+
+    if (error) {
+      throw error;
+    }
+
+    const nextUser = toUser(data.session?.user);
+    setUser(nextUser);
+    return nextUser;
   };
 
   const signup = async (name: string, email: string, password: string) => {
-    // TODO: Implémenter avec Supabase
-    const mockUser: User = {
-      id: Date.now().toString(),
-      name,
+    setLoading(true);
+    const { data, error } = await supabase.auth.signUp({
       email,
-      classeId: "",
-      isFirstLogin: true, // IMPORTANT : Tout sera à zéro pour lui
-    };
-    localStorage.setItem("user", JSON.stringify(mockUser));
-    setUser(mockUser);
-    return mockUser;
+      password,
+      options: {
+        data: {
+          name,
+          classeId: "",
+          isFirstLogin: true,
+        },
+      },
+    });
+    setLoading(false);
+
+    if (error) {
+      throw error;
+    }
+
+    const nextUser = toUser(data.user);
+    setUser(nextUser);
+    return nextUser;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const userId = user?.id;
+    await supabase.auth.signOut();
     localStorage.removeItem("user");
     localStorage.removeItem("selectedClass");
+    if (userId) {
+      localStorage.removeItem(`userProgress_${userId}`);
+      localStorage.removeItem(`userStreak_${userId}`);
+    }
     setUser(null);
   };
 
-  const updateUser = (updates: Partial<User>) => {
-    if (user) {
-      const updatedUser = { ...user, ...updates };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setUser(updatedUser);
+  const updateUser = async (updates: Partial<User>) => {
+    if (!user) return null;
+
+    const { data, error } = await supabase.auth.updateUser({
+      data: updates,
+    });
+
+    if (error) {
+      throw error;
     }
+
+    const updated = toUser(data.user) || user;
+    const merged = { ...updated, ...updates };
+    setUser(merged);
+    return merged;
   };
 
   return {

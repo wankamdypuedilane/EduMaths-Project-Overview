@@ -63,6 +63,24 @@ export function ProfilePage() {
     setConfirmPassword("");
   };
 
+  const handleDeleteAccount = () => {
+    // Confirmation native du navigateur
+    const confirmDelete = window.confirm(
+      "Êtes-vous vraiment sûr de vouloir supprimer votre compte ?\n\nCette action est irréversible. Toutes vos données (progression, exercices, statistiques) seront définitivement supprimées.",
+    );
+
+    if (!confirmDelete) {
+      return; // L'utilisateur a annulé
+    }
+
+    try {
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+      alert("Une erreur est survenue lors de la suppression");
+    }
+  };
+
   return (
     <AppLayout activePage="profile">
       <div className="p-8">
@@ -245,7 +263,10 @@ export function ProfilePage() {
         </div>
 
         {/* Delete Account Button */}
-        <button className=" cursor-pointer w-full bg-white border-2 border-red-600 text-red-600 h-12 rounded-xl font-semibold hover:bg-red-50 transition-all">
+        <button
+          onClick={handleDeleteAccount}
+          className=" cursor-pointer w-full bg-white border-2 border-red-600 text-red-600 h-12 rounded-xl font-semibold hover:bg-red-50 transition-all"
+        >
           Supprimer mon compte
         </button>
       </div>
