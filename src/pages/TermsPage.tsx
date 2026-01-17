@@ -5,6 +5,7 @@ import { BookOpen, CheckCircle } from "lucide-react";
 export function TermsPage() {
   const navigate = useNavigate();
   const [accepted, setAccepted] = useState(false);
+  const pdfUrl = "/docs/CGU-EduMaths.pdf";
 
   const handleAccept = () => {
     if (accepted) {
@@ -32,12 +33,17 @@ export function TermsPage() {
               générales d'utilisation :
             </p>
 
-            <button className=" cursor-pointer inline-flex items-center gap-3 bg-white border-2 border-indigo-600 px-8 py-4 rounded-xl hover:bg-indigo-50 active:scale-95 transition-all shadow-md">
+            <a
+              href={pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className=" cursor-pointer inline-flex items-center gap-3 bg-white border-2 border-indigo-600 px-8 py-4 rounded-xl hover:bg-indigo-50 active:scale-95 transition-all shadow-md"
+            >
               <BookOpen className="w-6 h-6 text-indigo-600" />
               <span className="text-indigo-600 font-semibold text-lg">
                 Conditions générales d'utilisation
               </span>
-            </button>
+            </a>
 
             <p className="text-sm text-gray-500 mt-4">
               Cliquez pour consulter le document complet

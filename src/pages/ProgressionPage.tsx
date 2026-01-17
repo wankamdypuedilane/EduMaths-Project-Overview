@@ -1,12 +1,15 @@
 import { AppLayout } from "../components/AppLayout";
 import { Trophy, Target, Award, Sparkles } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+import { useProgress } from "../hooks/useProgress";
 
 // ON IMPORTE LES CHAPITRES POUR QUE LA LISTE SOIT RÉELLE
 import chaptersData from "../data/chapters.json";
 
 export function ProgressionPage() {
-  // Pour l'instant, on simule des pourcentages, mais la liste vient du JSON
-  const getProgressValue = (index: number) => [85, 40, 10, 0, 0, 0][index] || 0;
+  const { user } = useAuth();
+  const { progress, getTotalStats, getChapterProgress } = useProgress(user?.id);
+  const stats = getTotalStats();
 
   return (
     <AppLayout activePage="progression">
@@ -17,7 +20,9 @@ export function ProgressionPage() {
             Ma Progression
           </h1>
           <p className="text-gray-600">
-            Bravo ! Tu as déjà complété 3 chapitres cette semaine.
+            {stats.completedExercises > 0
+              ? `Bravo ! Tu as complété ${stats.completedExercises} exercice${stats.completedExercises > 1 ? "s" : ""}.`
+              : "Commence ton aventure ! Aucun exercice complété pour l'instant."}
           </p>
         </div>
 
@@ -28,7 +33,7 @@ export function ProgressionPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center">
                 <div className="text-3xl font-black text-indigo-600 mb-1">
-                  24
+                  {stats.totalExercises}
                 </div>
                 <p className="text-xs font-bold text-gray-400 uppercase">
                   Exercices
@@ -36,7 +41,7 @@ export function ProgressionPage() {
               </div>
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center">
                 <div className="text-3xl font-black text-green-500 mb-1">
-                  87%
+                  {stats.successRate}%
                 </div>
                 <p className="text-xs font-bold text-gray-400 uppercase">
                   Succès
@@ -99,7 +104,8 @@ export function ProgressionPage() {
 
               <div className="space-y-8">
                 {chaptersData.map((chapter, index) => {
-                  const progress = getProgressValue(index);
+                  const chapterProgress = getChapterProgress(chapter.id);
+                  const progress = chapterProgress?.completion || 0;
                   return (
                     <div key={chapter.id} className="group">
                       <div className="flex items-center justify-between mb-3">

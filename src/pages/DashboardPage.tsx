@@ -10,6 +10,7 @@ import {
   Atom,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useProgress } from "../hooks/useProgress";
 
 const classesData = [
   { id: "6eme", label: "6ème", niveau: "Collège", order: 1 },
@@ -21,11 +22,32 @@ const classesData = [
   { id: "terminale", label: "Terminale", niveau: "Lycée", order: 7 },
 ];
 
+function getTimeAgo(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return "À l'instant";
+  if (diffMins < 60) return `Il y a ${diffMins}min`;
+  if (diffHours < 24) return `Il y a ${diffHours}h`;
+  if (diffDays === 1) return "Hier";
+  if (diffDays < 7) return `Il y a ${diffDays}j`;
+  return date.toLocaleDateString("fr-FR");
+}
+
 export function DashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { getTotalStats, getStreak, getRecentActivities } = useProgress(
+    user?.id,
+  );
   const selectedClassId = localStorage.getItem("selectedClass") || "6eme";
   const selectedClass = classesData.find((c) => c.id === selectedClassId);
+  const stats = getTotalStats();
+  const streak = getStreak();
+  const recentActivities = getRecentActivities();
 
   const isNew = user?.isFirstLogin;
 
@@ -54,7 +76,7 @@ export function DashboardPage() {
             </p>
             <div className="flex items-center justify-center gap-2">
               <span className="text-3xl">⚡</span>
-              <span className="text-white text-3xl font-bold">18</span>
+              <span className="text-white text-3xl font-bold">{streak}</span>
             </div>
           </div>
         </div>
@@ -66,7 +88,9 @@ export function DashboardPage() {
               <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center">
                 <Trophy className="w-6 h-6 text-blue-600" />
               </div>
-              <span className="text-2xl font-bold text-gray-800">24</span>
+              <span className="text-2xl font-bold text-gray-800">
+                {stats.completedExercises}
+              </span>
             </div>
             <p className="text-sm text-gray-600">Exercices réussis</p>
           </div>
@@ -76,7 +100,9 @@ export function DashboardPage() {
               <div className="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center">
                 <Target className="w-6 h-6 text-green-600" />
               </div>
-              <span className="text-2xl font-bold text-gray-800">87%</span>
+              <span className="text-2xl font-bold text-gray-800">
+                {stats.successRate}%
+              </span>
             </div>
             <p className="text-sm text-gray-600">Taux de réussite</p>
           </div>
@@ -86,9 +112,11 @@ export function DashboardPage() {
               <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center">
                 <Clock className="w-6 h-6 text-purple-600" />
               </div>
-              <span className="text-2xl font-bold text-gray-800">2h 34m</span>
+              <span className="text-2xl font-bold text-gray-800">
+                {stats.totalExercises}
+              </span>
             </div>
-            <p className="text-sm text-gray-600">Temps d'étude</p>
+            <p className="text-sm text-gray-600">Exercices tentés</p>
           </div>
         </div>
 
@@ -124,56 +152,42 @@ export function DashboardPage() {
             <h2 className="text-xl font-bold text-gray-800">
               Activité récente
             </h2>
-            <button className="text-sm font-bold text-indigo-600 hover:text-indigo-700">
-              Voir tout
-            </button>
           </div>
 
-          <div className="space-y-4">
-            {/* Activité 1 : Exercice réussi */}
-            <div className="flex items-center gap-4 p-4 bg-green-50/50 rounded-2xl border border-green-100/50 transition-all hover:scale-[1.01]">
-              <div className="bg-green-500 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm shadow-green-200">
-                <CheckCircle className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">Nombres décimaux</p>
-                <p className="text-sm text-green-700 font-medium">
-                  Exercice réussi • 100%
-                </p>
-              </div>
-              <span className="text-xs font-bold text-gray-400">Il y a 2h</span>
+          {recentActivities.length === 0 ? (
+            <div className="text-center py-12 text-gray-400">
+              <p className="text-sm italic">
+                Aucune activité pour le moment. Commencez un exercice !
+              </p>
             </div>
-
-            {/* Activité 2 : Lecture de cours */}
-            <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50 transition-all hover:scale-[1.01]">
-              <div className="bg-blue-500 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm shadow-blue-200">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">Les Fractions</p>
-                <p className="text-sm text-blue-700 font-medium">
-                  Fiche de révision consultée
-                </p>
-              </div>
-              <span className="text-xs font-bold text-gray-400">Hier</span>
+          ) : (
+            <div className="space-y-4">
+              {recentActivities.map((activity) => {
+                const timeAgo = getTimeAgo(new Date(activity.timestamp));
+                return (
+                  <div
+                    key={activity.id}
+                    className="flex items-center gap-4 p-4 bg-green-50/50 rounded-2xl border border-green-100/50 transition-all hover:scale-[1.01]"
+                  >
+                    <div className="bg-green-500 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm shadow-green-200">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-gray-800">
+                        {activity.title}
+                      </p>
+                      <p className="text-sm text-green-700 font-medium">
+                        {activity.description}
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold text-gray-400">
+                      {timeAgo}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-
-            {/* Activité 3 : Badge */}
-            <div className="flex items-center gap-4 p-4 bg-purple-50/50 rounded-2xl border border-purple-100/50 transition-all hover:scale-[1.01]">
-              <div className="bg-purple-500 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm shadow-purple-200">
-                <Award className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">
-                  Badge "Mathématicien en herbe"
-                </p>
-                <p className="text-sm text-purple-700 font-medium">
-                  Nouveau trophée débloqué !
-                </p>
-              </div>
-              <span className="text-xs font-bold text-gray-400">Il y a 3j</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </AppLayout>

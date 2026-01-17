@@ -31,7 +31,11 @@ export function FormulasPage() {
       <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-8">
         <div className="max-w-4xl mx-auto">
           <button
-            onClick={() => navigate("/chapters")}
+            onClick={() => {
+              const selectedClass =
+                localStorage.getItem("selectedClass") || "6eme";
+              navigate(`/classes/${selectedClass}/chapters`);
+            }}
             className=" cursor-pointer text-white/80 hover:text-white mb-4 flex items-center gap-2 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Retour aux chapitres

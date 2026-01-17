@@ -1,12 +1,16 @@
 import { useParams, useNavigate } from "react-router";
 import { AppLayout } from "../components/AppLayout";
-import { BookOpen } from "lucide-react";
+import { BookOpen, CheckCircle } from "lucide-react";
 import exercisesData from "../data/exercises.json";
 import chaptersData from "../data/chapters.json";
+import { useAuth } from "../hooks/useAuth";
+import { useProgress } from "../hooks/useProgress";
 
 export function ExercisesPage() {
   const { chapterId } = useParams<{ chapterId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { getExerciseProgress } = useProgress(user?.id);
 
   // 1. On trouve les infos du chapitre actuel
   const chapter = chaptersData.find((c) => c.id === chapterId);
@@ -80,41 +84,61 @@ export function ExercisesPage() {
                     </span>
                   </h2>
                   <div className="grid gap-4">
-                    {exs.map((exercise, index) => (
-                      <div
-                        key={exercise.id}
-                        className="bg-white rounded-2xl p-6 shadow-sm border border-transparent hover:border-indigo-200 hover:shadow-md transition-all"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="font-semibold text-lg text-gray-800">
-                                Exercice {index + 1}
-                              </h3>
-                              <span
-                                className={`px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(
-                                  difficulty,
-                                )}`}
-                              >
-                                {difficulty.charAt(0).toUpperCase() +
-                                  difficulty.slice(1)}
-                              </span>
+                    {exs.map((exercise, index) => {
+                      const exerciseProgress = getExerciseProgress(exercise.id);
+                      const isCompleted = exerciseProgress?.completed || false;
+                      return (
+                        <div
+                          key={exercise.id}
+                          className={`bg-white rounded-2xl p-6 shadow-sm border transition-all ${
+                            isCompleted
+                              ? "border-green-200 bg-green-50/30"
+                              : "border-transparent hover:border-indigo-200 hover:shadow-md"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                {isCompleted && (
+                                  <CheckCircle className="w-5 h-5 text-green-600" />
+                                )}
+                                <h3 className="font-semibold text-lg text-gray-800">
+                                  Exercice {index + 1}
+                                </h3>
+                                <span
+                                  className={`px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(
+                                    difficulty,
+                                  )}`}
+                                >
+                                  {difficulty.charAt(0).toUpperCase() +
+                                    difficulty.slice(1)}
+                                </span>
+                                {isCompleted && exerciseProgress && (
+                                  <span className="text-xs font-bold text-green-600">
+                                    {exerciseProgress.score}%
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-gray-600 line-clamp-2">
+                                {exercise.question}
+                              </p>
                             </div>
-                            <p className="text-gray-600 line-clamp-2">
-                              {exercise.question}
-                            </p>
+                            <button
+                              onClick={() =>
+                                navigate(`/exercises/${exercise.id}`)
+                              }
+                              className={`cursor-pointer px-8 py-3 rounded-xl font-bold transition-all ml-6 ${
+                                isCompleted
+                                  ? "bg-green-600 text-white hover:bg-green-700"
+                                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+                              }`}
+                            >
+                              {isCompleted ? "Refaire" : "Démarrer"}
+                            </button>
                           </div>
-                          <button
-                            onClick={() =>
-                              navigate(`/exercises/${exercise.id}`)
-                            }
-                            className=" cursor-pointer bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all ml-6"
-                          >
-                            Démarrer
-                          </button>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               );

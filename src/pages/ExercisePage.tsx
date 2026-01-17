@@ -2,15 +2,21 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import exercisesData from "../data/exercises.json";
+import { useAuth } from "../hooks/useAuth";
+import { useProgress } from "../hooks/useProgress";
 
 export function ExercisePage() {
   const { exerciseId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { updateExerciseProgress, getExerciseProgress } = useProgress(user?.id);
+
   const [answer, setAnswer] = useState("");
   const [showSolution, setShowSolution] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
   const exercise = exercisesData.find((e) => e.id === exerciseId);
+  const existingProgress = exercise ? getExerciseProgress(exercise.id) : null;
 
   if (!exercise) {
     return (
@@ -23,14 +29,19 @@ export function ExercisePage() {
   }
 
   const handleValidate = () => {
+    if (!exercise) return;
+
     const userAns = answer.trim().toLowerCase();
     const correctAns = exercise.answer.toLowerCase();
 
-    if (userAns === correctAns) {
-      setIsCorrect(true);
-    } else {
-      setIsCorrect(false);
-    }
+    const correct = userAns === correctAns;
+    setIsCorrect(correct);
+
+    // Calculer le score : 100 si correct, 0 si incorrect
+    const score = correct ? 100 : 0;
+
+    // Sauvegarder la progression dans localStorage et state
+    updateExerciseProgress(exercise.chapterId, exercise.id, score);
 
     // On affiche la solution après avoir cliqué sur Valider
     setShowSolution(true);
@@ -146,7 +157,11 @@ export function ExercisePage() {
             ) : (
               // Bouton Continuer : remplace le bouton valider après la réponse
               <button
-                onClick={() => navigate("/chapters")}
+                onClick={() => {
+                  const selectedClass =
+                    localStorage.getItem("selectedClass") || "6eme";
+                  navigate(`/classes/${selectedClass}/chapters`);
+                }}
                 className=" cursor-pointer w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-900 transition-all"
               >
                 <span className="text-gray-700 font-semibold">

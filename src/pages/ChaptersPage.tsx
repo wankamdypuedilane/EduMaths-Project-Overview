@@ -2,25 +2,30 @@ import { useParams, useNavigate } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import { BookOpen, CheckCircle } from "lucide-react";
 import chaptersData from "../data/chapters.json";
+import { useAuth } from "../hooks/useAuth";
+import { useProgress } from "../hooks/useProgress";
 
 export function ChaptersPage() {
   const { classeId } = useParams<{ classeId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { getChapterProgress } = useProgress(user?.id);
 
   const filteredChapters = chaptersData.filter((ch) =>
-    ch.classeIds.includes(classeId || "")
+    ch.classeIds.includes(classeId || ""),
   );
 
   // Filtrer les chapitres disponibles pour cette classe
   const availableChapters = chaptersData.filter((chapter) =>
-    chapter.classeIds.includes(classeId || "")
+    chapter.classeIds.includes(classeId || ""),
   );
 
-  // Simuler le statut de progression (à remplacer par vraies données Supabase)
-  const getChapterStatus = (index: number) => {
-    if (index === 0) return "completed";
-    if (index === 1) return "in-progress";
-    return "not-started";
+  // Obtenir le statut réel de progression depuis useProgress
+  const getChapterStatus = (chapterId: string) => {
+    const progress = getChapterProgress(chapterId);
+    if (!progress || progress.completion === 0) return "not-started";
+    if (progress.completion === 100) return "completed";
+    return "in-progress";
   };
 
   return (
@@ -47,7 +52,9 @@ export function ChaptersPage() {
           </div>
         ) : (
           availableChapters.map((chapter, index) => {
-            const status = getChapterStatus(index);
+            const status = getChapterStatus(chapter.id);
+            const chapterProgress = getChapterProgress(chapter.id);
+            const completion = chapterProgress?.completion || 0;
             return (
               <button
                 key={chapter.id}
@@ -60,8 +67,8 @@ export function ChaptersPage() {
                       status === "completed"
                         ? "bg-green-100"
                         : status === "in-progress"
-                        ? "bg-indigo-100"
-                        : "bg-gray-100"
+                          ? "bg-indigo-100"
+                          : "bg-gray-100"
                     }`}
                   >
                     {status === "completed" ? (
@@ -86,9 +93,14 @@ export function ChaptersPage() {
                     {status === "in-progress" && (
                       <div className="flex items-center gap-2">
                         <div className="bg-gray-200 h-1 rounded-full w-20 overflow-hidden">
-                          <div className="bg-indigo-600 h-full w-1/2"></div>
+                          <div
+                            className="bg-indigo-600 h-full"
+                            style={{ width: `${completion}%` }}
+                          ></div>
                         </div>
-                        <span className="text-xs text-indigo-600">50%</span>
+                        <span className="text-xs text-indigo-600">
+                          {completion}%
+                        </span>
                       </div>
                     )}
                     {status === "not-started" && (
