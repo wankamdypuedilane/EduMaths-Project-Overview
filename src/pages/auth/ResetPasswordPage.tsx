@@ -92,19 +92,19 @@ export function ResetPasswordPage() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Nouveau mot de passe
             </label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+            <div className="bg-gray-50 border border-gray-300 rounded-xl h-12 flex items-center px-4">
+              <Lock className="w-5 h-5 text-gray-400 mr-3" />
               <input
                 type={showPassword ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Minimum 8 caractères"
-                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="bg-transparent flex-1 outline-none text-gray-700 focus:ring-0"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 ml-2"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -120,19 +120,19 @@ export function ResetPasswordPage() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Confirmer le mot de passe
             </label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+            <div className="bg-gray-50 border border-gray-300 rounded-xl h-12 flex items-center px-4">
+              <Lock className="w-5 h-5 text-gray-400 mr-3" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirmer le mot de passe"
-                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="bg-transparent flex-1 outline-none text-gray-700 focus:ring-0"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 ml-2"
               >
                 {showConfirmPassword ? (
                   <EyeOff className="w-5 h-5" />

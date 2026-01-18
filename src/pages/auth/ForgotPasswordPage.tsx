@@ -103,14 +103,14 @@ export function ForgotPasswordPage() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Adresse email
             </label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+            <div className="bg-gray-50 border border-gray-300 rounded-xl h-12 flex items-center px-4">
+              <Mail className="w-5 h-5 text-gray-400 mr-3" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="exemple@email.com"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="bg-transparent flex-1 outline-none text-gray-700 focus:ring-0"
               />
             </div>
           </div>
