@@ -12,18 +12,20 @@ interface User {
   email: string;
   classeId: string;
   isFirstLogin: boolean;
+  avatarUrl?: string;
 }
 
-const toUser = (supabaseUser?: SupabaseUser | null): User | null => {
+const toUser = (supabaseUser?: SupabaseUser | null, profile?: any): User | null => {
   if (!supabaseUser) return null;
   const metadata = supabaseUser.user_metadata || {};
 
   return {
     id: supabaseUser.id,
-    name: metadata.name || supabaseUser.email || "Utilisateur",
-    email: supabaseUser.email || "",
-    classeId: metadata.classeId || "",
+    name: profile?.name || metadata.name || supabaseUser.email || "Utilisateur",
+    email: profile?.email || supabaseUser.email || "",
+    classeId: profile?.classe_id || metadata.classeId || "6eme",
     isFirstLogin: Boolean(metadata.isFirstLogin),
+    avatarUrl: profile?.avatar_url,
   };
 };
 
@@ -44,16 +46,34 @@ export function useAuth() {
         return;
       }
 
-      const activeUser = toUser(data.session?.user);
+      if (data.session?.user) {
+        // Fetch user profile from profiles table
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", data.session.user.id)
+          .single();
 
-      // Si pas de session Supabase, on ne charge plus l'ancien fallback local (car l'id n'est pas un uuid et bloque Supabase)
-      setUser(activeUser);
+        const activeUser = toUser(data.session?.user, profileData);
+        setUser(activeUser);
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     };
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event: AuthChangeEvent, session: Session | null) => {
-        setUser(toUser(session?.user));
+      async (_event: AuthChangeEvent, session: Session | null) => {
+        if (session?.user) {
+          const { data: profileData } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+          setUser(toUser(session?.user, profileData));
+        } else {
+          setUser(null);
+        }
       },
     );
 
@@ -90,7 +110,7 @@ export function useAuth() {
       options: {
         data: {
           name,
-          classeId: "",
+          classeId: "6eme",
           isFirstLogin: true,
         },
       },
@@ -99,6 +119,16 @@ export function useAuth() {
 
     if (error) {
       throw error;
+    }
+
+    // Create profile entry in profiles table
+    if (data.user) {
+      await supabase.from("profiles").insert({
+        id: data.user.id,
+        email,
+        name,
+        classe_id: "6eme",
+      });
     }
 
     const nextUser = toUser(data.user);
@@ -121,18 +151,101 @@ export function useAuth() {
   const updateUser = async (updates: Partial<User>) => {
     if (!user) return null;
 
-    const { data, error } = await supabase.auth.updateUser({
-      data: updates,
-    });
+    try {
+      // Update auth metadata if email or name changed
+      if (updates.email || updates.name) {
+        const authUpdate: any = {};
+        if (updates.email) authUpdate.email = updates.email;
+        if (updates.name)
+          authUpdate.data = { ...user, name: updates.name };
 
-    if (error) {
+        await supabase.auth.updateUser(authUpdate);
+      }
+
+      // Update profiles table
+      const profileUpdate: any = {};
+      if (updates.name) profileUpdate.name = updates.name;
+      if (updates.email) profileUpdate.email = updates.email;
+      if (updates.classeId) profileUpdate.classe_id = updates.classeId;
+      if (updates.avatarUrl) profileUpdate.avatar_url = updates.avatarUrl;
+
+      if (Object.keys(profileUpdate).length > 0) {
+        profileUpdate.updated_at = new Date().toISOString();
+        await supabase
+          .from("profiles")
+          .update(profileUpdate)
+          .eq("id", user.id);
+      }
+
+      // Update local state
+      const updated = { ...user, ...updates };
+      setUser(updated);
+      return updated;
+    } catch (error) {
+      console.error("Error updating user:", error);
       throw error;
     }
+  };
 
-    const updated = toUser(data.user) || user;
-    const merged = { ...updated, ...updates };
-    setUser(merged);
-    return merged;
+  const updatePassword = async (
+    currentPassword: string,
+    newPassword: string,
+  ) => {
+    try {
+      // First verify current password by signing in
+      if (!user?.email) throw new Error("User email not found");
+
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+
+      if (verifyError) {
+        throw new Error("Current password is incorrect");
+      }
+
+      // Update password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (updateError) throw updateError;
+
+      return true;
+    } catch (error) {
+      console.error("Error updating password:", error);
+      throw error;
+    }
+  };
+
+  const requestPasswordReset = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) throw error;
+
+      return true;
+    } catch (error) {
+      console.error("Error requesting password reset:", error);
+      throw error;
+    }
+  };
+
+  const resetPassword = async (newPassword: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) throw error;
+
+      return true;
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      throw error;
+    }
   };
 
   const deleteAccount = async () => {
@@ -166,6 +279,9 @@ export function useAuth() {
     signup,
     logout,
     updateUser,
+    updatePassword,
+    requestPasswordReset,
+    resetPassword,
     deleteAccount,
   };
 }

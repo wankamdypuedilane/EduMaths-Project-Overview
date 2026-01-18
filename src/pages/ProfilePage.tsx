@@ -1,8 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "../components/AppLayout";
-import { Lock, Eye, EyeOff } from "lucide-react";
+import { Lock, Eye, EyeOff, Loader } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { supabase } from "../lib/supabaseClient";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,15 +16,20 @@ import {
 } from "../components/ui/alert-dialog";
 
 export function ProfilePage() {
-  const { user, updateUser, deleteAccount } = useAuth();
+  const { user, updateUser, updatePassword, deleteAccount } = useAuth();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    user?.avatarUrl || null,
+  );
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Password fields
   const [currentPassword, setCurrentPassword] = useState("");
@@ -34,6 +40,16 @@ export function ProfilePage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Update state when user changes
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setProfileImage(user.avatarUrl || null);
+    }
+  }, [user]);
 
   // Obtenir les initiales
   const getInitials = (fullName: string) => {
@@ -59,22 +75,87 @@ export function ProfilePage() {
     fileInputRef.current?.click();
   };
 
-  const handleSave = () => {
-    // TODO: Sauvegarder dans Supabase
-    updateUser({ name, email });
-    alert("Modifications enregistrées !");
+  const handleSave = async () => {
+    setSaving(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      // Prepare updates
+      const updates: any = { name, email };
+
+      // If there's a new image, upload it first
+      if (profileImage && profileImage.startsWith("data:") && user) {
+        const file = await fetch(profileImage).then((r) => r.blob());
+        const fileName = `${user.id}-${Date.now()}.jpg`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(fileName, file, { upsert: true });
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(fileName);
+
+        updates.avatarUrl = urlData?.publicUrl;
+      }
+
+      await updateUser(updates);
+      setSuccessMessage("Profil mis à jour avec succès !");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (error: any) {
+      setErrorMessage(error.message || "Erreur lors de la sauvegarde");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleChangePassword = () => {
-    // TODO: Changer le mot de passe avec Supabase
-    if (newPassword !== confirmPassword) {
-      alert("Les mots de passe ne correspondent pas !");
-      return;
+  const handleChangePassword = async () => {
+    setSavingPassword(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      if (!currentPassword) {
+        setErrorMessage("Veuillez entrer votre mot de passe actuel");
+        setSavingPassword(false);
+        return;
+      }
+
+      if (!newPassword || !confirmPassword) {
+        setErrorMessage("Veuillez remplir tous les champs");
+        setSavingPassword(false);
+        return;
+      }
+
+      if (newPassword.length < 8) {
+        setErrorMessage("Le mot de passe doit faire au moins 8 caractères");
+        setSavingPassword(false);
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        setErrorMessage("Les mots de passe ne correspondent pas !");
+        setSavingPassword(false);
+        return;
+      }
+
+      await updatePassword(currentPassword, newPassword);
+
+      setSuccessMessage("Mot de passe modifié avec succès !");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (error: any) {
+      setErrorMessage(
+        error.message || "Erreur lors du changement de mot de passe",
+      );
+    } finally {
+      setSavingPassword(false);
     }
-    alert("Mot de passe modifié avec succès !");
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
   };
 
   const handleDeleteAccount = async () => {
@@ -84,7 +165,9 @@ export function ProfilePage() {
       navigate("/");
     } catch (error) {
       console.error("Erreur lors de la suppression:", error);
-      alert("Une erreur est survenue lors de la suppression du compte");
+      setErrorMessage(
+        "Une erreur est survenue lors de la suppression du compte",
+      );
     } finally {
       setIsDeleting(false);
       setShowDeleteDialog(false);
@@ -101,6 +184,19 @@ export function ProfilePage() {
             Gérez vos informations personnelles et paramètres
           </p>
         </div>
+
+        {/* Success/Error Messages */}
+        {successMessage && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
+            {successMessage}
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+            {errorMessage}
+          </div>
+        )}
 
         {/* Profile Card */}
         <div className="bg-white rounded-xl p-8 shadow-sm mb-6">
@@ -166,9 +262,11 @@ export function ProfilePage() {
         {/* Save Button */}
         <button
           onClick={handleSave}
-          className=" cursor-pointer w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 transition-all mb-6"
+          disabled={saving}
+          className="cursor-pointer w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 transition-all mb-6 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
-          Enregistrer les modifications
+          {saving && <Loader className="w-4 h-4 animate-spin" />}
+          {saving ? "Enregistrement..." : "Enregistrer les modifications"}
         </button>
 
         {/* Security Section */}
@@ -213,15 +311,30 @@ export function ProfilePage() {
                     placeholder="••••••••"
                     className="bg-transparent flex-1 outline-none text-gray-700 focus:ring-0"
                   />
+                  <button
+                    type="button"
+                    onClick={() => field.setShow(!field.show)}
+                    className="text-gray-400 hover:text-gray-600 ml-2"
+                  >
+                    {field.show ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
                 </div>
               </div>
             ))}
 
             <button
               onClick={handleChangePassword}
-              className="w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 cursor-pointer shadow-md shadow-indigo-100 transition-all mt-2"
+              disabled={savingPassword}
+              className="w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 cursor-pointer shadow-md shadow-indigo-100 transition-all mt-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Modifier le mot de passe
+              {savingPassword && <Loader className="w-4 h-4 animate-spin" />}
+              {savingPassword
+                ? "Modification..."
+                : "Modifier le mot de passe"}
             </button>
           </div>
         </div>
@@ -239,7 +352,7 @@ export function ProfilePage() {
               </div>
               <button
                 onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-                className={` cursor-pointer w-12 h-6 rounded-full relative transition-all ${
+                className={`cursor-pointer w-12 h-6 rounded-full relative transition-all ${
                   notificationsEnabled ? "bg-indigo-600" : "bg-gray-300"
                 }`}
               >
@@ -258,7 +371,7 @@ export function ProfilePage() {
               </div>
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className={` cursor-pointer w-12 h-6 rounded-full relative transition-all ${
+                className={`cursor-pointer w-12 h-6 rounded-full relative transition-all ${
                   darkMode ? "bg-indigo-600" : "bg-gray-300"
                 }`}
               >

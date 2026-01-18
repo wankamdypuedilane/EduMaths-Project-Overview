@@ -5,6 +5,8 @@ import { LoginPage } from "../pages/auth/LoginPage";
 import { SignupPage } from "../pages/auth/SignupPage";
 import { TermsPage } from "../pages/auth/TermsPage";
 import { WelcomePage } from "../pages/auth/WelcomePage";
+import { ForgotPasswordPage } from "../pages/auth/ForgotPasswordPage";
+import { ResetPasswordPage } from "../pages/auth/ResetPasswordPage";
 
 // Learning pages
 import { ChaptersPage } from "../pages/learning/ChaptersPage";
@@ -32,6 +34,8 @@ export function AppRouter() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/class-selection" element={<ClassSelectionPage />} />
 
       {/* Protected routes */}

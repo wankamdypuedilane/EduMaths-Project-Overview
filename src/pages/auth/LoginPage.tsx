@@ -89,7 +89,8 @@ export function LoginPage() {
             <div className="text-right">
               <button
                 type="button"
-                className=" cursor-pointer text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                onClick={() => navigate("/forgot-password")}
+                className="cursor-pointer text-sm text-indigo-600 hover:text-indigo-700 font-medium"
               >
                 Mot de passe oublié ?
               </button>
