@@ -15,7 +15,10 @@ interface User {
   avatarUrl?: string;
 }
 
-const toUser = (supabaseUser?: SupabaseUser | null, profile?: any): User | null => {
+const toUser = (
+  supabaseUser?: SupabaseUser | null,
+  profile?: any,
+): User | null => {
   if (!supabaseUser) return null;
   const metadata = supabaseUser.user_metadata || {};
 
@@ -156,8 +159,7 @@ export function useAuth() {
       if (updates.email || updates.name) {
         const authUpdate: any = {};
         if (updates.email) authUpdate.email = updates.email;
-        if (updates.name)
-          authUpdate.data = { ...user, name: updates.name };
+        if (updates.name) authUpdate.data = { ...user, name: updates.name };
 
         await supabase.auth.updateUser(authUpdate);
       }
@@ -171,10 +173,7 @@ export function useAuth() {
 
       if (Object.keys(profileUpdate).length > 0) {
         profileUpdate.updated_at = new Date().toISOString();
-        await supabase
-          .from("profiles")
-          .update(profileUpdate)
-          .eq("id", user.id);
+        await supabase.from("profiles").update(profileUpdate).eq("id", user.id);
       }
 
       // Update local state

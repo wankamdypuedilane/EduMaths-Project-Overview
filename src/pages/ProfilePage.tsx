@@ -185,7 +185,6 @@ export function ProfilePage() {
           </p>
         </div>
 
-        {/* Success/Error Messages */}
         {successMessage && (
           <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
             {successMessage}
@@ -198,7 +197,6 @@ export function ProfilePage() {
           </div>
         )}
 
-        {/* Profile Card */}
         <div className="bg-white rounded-xl p-8 shadow-sm mb-6">
           <div className="flex items-center gap-6 mb-8">
             <div className="bg-indigo-100 w-24 h-24 rounded-2xl flex items-center justify-center text-3xl font-bold text-indigo-600 overflow-hidden">
@@ -231,7 +229,6 @@ export function ProfilePage() {
             </div>
           </div>
 
-          {/* Personal Info */}
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-gray-700 mb-2 block">
@@ -269,7 +266,6 @@ export function ProfilePage() {
           {saving ? "Enregistrement..." : "Enregistrer les modifications"}
         </button>
 
-        {/* Security Section */}
         <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm mb-6 border border-gray-100">
           <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">
             Sécurité
@@ -332,9 +328,7 @@ export function ProfilePage() {
               className="w-full bg-indigo-600 text-white h-12 rounded-xl font-semibold hover:bg-indigo-700 cursor-pointer shadow-md shadow-indigo-100 transition-all mt-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {savingPassword && <Loader className="w-4 h-4 animate-spin" />}
-              {savingPassword
-                ? "Modification..."
-                : "Modifier le mot de passe"}
+              {savingPassword ? "Modification..." : "Modifier le mot de passe"}
             </button>
           </div>
         </div>
