@@ -8,7 +8,7 @@ Run `npm i` to install the dependencies.
 
 ## Supabase (auth + progression)
 
-1. Crée un fichier `.env` à partir de [.env.example](.env.example) et renseigne `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`.
+1. Crée un fichier `.env` à partir de [.env](.env) et renseigne `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`.
 2. Dans Supabase, exécute le SQL du fichier [docs/supabase-setup.sql](docs/supabase-setup.sql) (tables `exercise_progress`, `streaks` + RLS).
 3. Auth : `useAuth` utilise Supabase (signup/login/logout) et conserve un fallback local pour les anciens utilisateurs.
 4. Progression : `useProgress` lit/écrit la progression et le streak dans Supabase pour l’utilisateur connecté.
