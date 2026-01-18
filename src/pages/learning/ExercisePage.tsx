@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AppLayout } from "../components/AppLayout";
-import exercisesData from "../data/exercises.json";
-import { useAuth } from "../hooks/useAuth";
-import { useProgress } from "../hooks/useProgress";
+import { AppLayout } from "../../components/AppLayout";
+import exercisesData from "../../data/exercises.json";
+import { useAuth } from "../../hooks/useAuth";
+import { useProgress } from "../../hooks/useProgress";
 
 export function ExercisePage() {
   const { exerciseId } = useParams();
@@ -96,7 +96,7 @@ export function ExercisePage() {
                 placeholder="..."
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
-                disabled={showSolution} // NOUVEAU : On bloque l'écriture si la solution est affichée
+                disabled={showSolution}
                 className="bg-transparent border-none outline-none flex-1 text-lg px-2"
               />
               {exercise.unit && (
@@ -105,7 +105,7 @@ export function ExercisePage() {
             </div>
           </div>
 
-          {/* NOUVEAU : BLOC SOLUTION (S'affiche uniquement après validation) */}
+          {/* BLOC SOLUTION */}
           {showSolution && (
             <div
               className={`mb-6 p-6 rounded-xl border-l-4 shadow-md transition-all ${
@@ -132,13 +132,13 @@ export function ExercisePage() {
                   Explication détaillée :
                 </p>
                 <p className="text-gray-800 leading-relaxed whitespace-pre-line">
-                  {exercise.solution} {/* On va chercher le texte du JSON */}
+                  {exercise.solution}
                 </p>
               </div>
             </div>
           )}
 
-          {/* Hints Section (cachée si la solution est déjà là) */}
+          {/* Hints Section */}
           {!showSolution && exercise.hints && exercise.hints.length > 0 && (
             <div className="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
               <h4 className="font-semibold text-yellow-800 mb-2">💡 Indices</h4>
@@ -155,7 +155,6 @@ export function ExercisePage() {
           {/* Actions */}
           <div className="mt-8 space-y-3">
             {!showSolution ? (
-              // Bouton Valider : visible au début
               <button
                 onClick={handleValidate}
                 disabled={!answer.trim() || saving}
@@ -168,7 +167,6 @@ export function ExercisePage() {
                 <span className="font-semibold">Valider ma réponse</span>
               </button>
             ) : (
-              // Bouton Continuer : remplace le bouton valider après la réponse
               <button
                 onClick={() => {
                   const selectedClass =

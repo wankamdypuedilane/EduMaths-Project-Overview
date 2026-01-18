@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 const classesData = [
   { id: "6eme", label: "6ème", niveau: "Collège", order: 1 },
@@ -13,11 +15,22 @@ const classesData = [
 
 export function ClassSelectionPage() {
   const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleSelectClass = (classeId: string) => {
-    // TODO: Sauvegarder la classe dans le contexte utilisateur ou Supabase
-    localStorage.setItem("selectedClass", classeId);
-    navigate("/dashboard");
+  const handleSelectClass = async (classeId: string) => {
+    setLoading(true);
+    try {
+      // Mettre à jour la classe dans les metadata Supabase
+      await updateUser({ classeId });
+      // Sauvegarder aussi en localStorage pour fallback
+      localStorage.setItem("selectedClass", classeId);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour de la classe", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +53,8 @@ export function ClassSelectionPage() {
             <button
               key={classe.id}
               onClick={() => handleSelectClass(classe.id)}
-              className="cursor-pointer bg-white border-2 border-gray-300 rounded-xl p-6 hover:border-indigo-600 hover:bg-indigo-50 transition-all text-center group"
+              disabled={loading}
+              className="cursor-pointer bg-white border-2 border-gray-300 rounded-xl p-6 hover:border-indigo-600 hover:bg-indigo-50 transition-all text-center group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="text-2xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">
                 {classe.label}

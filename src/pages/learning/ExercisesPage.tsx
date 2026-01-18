@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { AppLayout } from "../components/AppLayout";
+import { AppLayout } from "../../components/AppLayout";
 import { BookOpen, CheckCircle } from "lucide-react";
-import exercisesData from "../data/exercises.json";
-import chaptersData from "../data/chapters.json";
-import { useAuth } from "../hooks/useAuth";
-import { useProgress } from "../hooks/useProgress";
+import exercisesData from "../../data/exercises.json";
+import chaptersData from "../../data/chapters.json";
+import { useAuth } from "../../hooks/useAuth";
+import { useProgress } from "../../hooks/useProgress";
 
 export function ExercisesPage() {
   const { chapterId } = useParams<{ chapterId: string }>();
@@ -73,7 +73,7 @@ export function ExercisesPage() {
         ) : (
           <div className="space-y-12">
             {Object.entries(exercisesByDifficulty).map(([difficulty, exs]) => {
-              if (exs.length === 0) return null; // Ne pas afficher le titre "Difficile" s'il n'y a pas d'exos
+              if (exs.length === 0) return null;
 
               return (
                 <div key={difficulty}>

@@ -1,9 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { AppLayout } from "../components/AppLayout";
+import { AppLayout } from "../../components/AppLayout";
 import { CheckCircle, XCircle, ArrowRight, RotateCcw } from "lucide-react";
-
-// IMPORT DES DONNÉES DEPUIS LES JSON
-import exercisesData from "../data/exercises.json";
+import exercisesData from "../../data/exercises.json";
 
 export function SolutionPage() {
   const { exerciseId } = useParams<{ exerciseId: string }>();

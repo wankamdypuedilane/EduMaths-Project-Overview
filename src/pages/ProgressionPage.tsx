@@ -2,6 +2,7 @@ import { AppLayout } from "../components/AppLayout";
 import { Trophy, Target, Award, Sparkles } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useProgress } from "../hooks/useProgress";
+import { getUnlockedBadges } from "../lib/badges";
 
 // ON IMPORTE LES CHAPITRES POUR QUE LA LISTE SOIT RÉELLE
 import chaptersData from "../data/chapters.json";
@@ -12,6 +13,12 @@ export function ProgressionPage() {
     useProgress(user?.id);
   const stats = getTotalStats();
   const streak = getStreak();
+
+  const unlockedBadges = getUnlockedBadges(
+    stats.successRate,
+    stats.totalExercises,
+    streak,
+  );
 
   return (
     <AppLayout activePage="progression">
@@ -59,50 +66,84 @@ export function ProgressionPage() {
               </div>
             </div>
 
-            {/* Badges */}
+            {/* Badges Dynamiques */}
             <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
               <h2 className="text-lg font-bold text-gray-800 mb-6">
-                Tes Trophées
+                Trophées Débloqués
               </h2>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  {
-                    icon: Trophy,
-                    label: "Master",
-                    color: "bg-yellow-100 text-yellow-600",
-                  },
-                  {
-                    icon: Target,
-                    label: "Sniper",
-                    color: "bg-blue-100 text-blue-600",
-                  },
-                  {
-                    icon: Award,
-                    label: "Major",
-                    color: "bg-purple-100 text-purple-600",
-                  },
-                  {
-                    icon: Sparkles,
-                    label: "Flash",
-                    color: "bg-pink-100 text-pink-600",
-                  },
-                ].map((badge, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center p-3 bg-gray-50 rounded-2xl"
-                  >
+              {unlockedBadges.length === 0 ? (
+                <p className="text-sm text-gray-500">
+                  Continue tes exercices pour débloquer des trophées !
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  {unlockedBadges.map((badge) => (
                     <div
-                      className={`${badge.color} w-12 h-12 rounded-xl flex items-center justify-center mb-2`}
+                      key={badge.id}
+                      className="flex flex-col items-center p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100"
                     >
-                      <badge.icon className="w-6 h-6" />
+                      <div
+                        className={`${badge.color} w-12 h-12 rounded-xl flex items-center justify-center mb-2 text-lg`}
+                      >
+                        {badge.icon}
+                      </div>
+                      <p className="text-xs font-bold text-gray-700">
+                        {badge.label}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {badge.description}
+                      </p>
                     </div>
-                    <p className="text-xs font-bold text-gray-700">
-                      {badge.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
+            {/* Ancien bloc de badges (à supprimer si pas utile) */}
+            {false && (
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                <h2 className="text-lg font-bold text-gray-800 mb-6">
+                  Tes Trophées
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    {
+                      icon: Trophy,
+                      label: "Master",
+                      color: "bg-yellow-100 text-yellow-600",
+                    },
+                    {
+                      icon: Target,
+                      label: "Sniper",
+                      color: "bg-blue-100 text-blue-600",
+                    },
+                    {
+                      icon: Award,
+                      label: "Major",
+                      color: "bg-purple-100 text-purple-600",
+                    },
+                    {
+                      icon: Sparkles,
+                      label: "Flash",
+                      color: "bg-pink-100 text-pink-600",
+                    },
+                  ].map((badge, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center p-3 bg-gray-50 rounded-2xl"
+                    >
+                      <div
+                        className={`${badge.color} w-12 h-12 rounded-xl flex items-center justify-center mb-2`}
+                      >
+                        <badge.icon className="w-6 h-6" />
+                      </div>
+                      <p className="text-xs font-bold text-gray-700">
+                        {badge.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Colonne de droite : Progression par chapitre (Dynamique) */}

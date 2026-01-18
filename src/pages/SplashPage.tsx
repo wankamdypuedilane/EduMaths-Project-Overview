@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import { Calculator } from 'lucide-react';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Calculator } from "lucide-react";
 
 export function SplashPage() {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ export function SplashPage() {
   useEffect(() => {
     // Rediriger vers la page welcome après 2 secondes
     const timer = setTimeout(() => {
-      navigate('/welcome');
+      navigate("/welcome");
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -21,7 +21,9 @@ export function SplashPage() {
           <Calculator className="w-16 h-16 text-indigo-600" />
         </div>
         <h1 className="text-6xl font-bold text-white mb-4">EduMaths</h1>
-        <p className="text-xl text-indigo-100">Révisez vos maths avec plaisir</p>
+        <p className="text-xl text-indigo-100">
+          Révisez vos maths avec plaisir
+        </p>
         <div className="mt-8">
           <div className="animate-bounce">
             <div className="w-2 h-2 bg-white rounded-full mx-auto"></div>

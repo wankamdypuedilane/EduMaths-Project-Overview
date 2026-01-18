@@ -135,6 +135,30 @@ export function useAuth() {
     return merged;
   };
 
+  const deleteAccount = async () => {
+    if (!user) return;
+
+    const userId = user.id;
+
+    // Supprimer d'abord les données utilisateur (progression et streaks)
+    await supabase.from("exercise_progress").delete().eq("user_id", userId);
+    await supabase.from("streaks").delete().eq("user_id", userId);
+
+    // Ensuite supprimer le compte Supabase
+    // Note: Supabase ne permet pas de supprimer son propre compte via l'API client
+    // Il faut utiliser l'API admin ou faire une RPC côté serveur
+    // Pour l'instant on déconnecte l'utilisateur
+    await supabase.auth.signOut();
+
+    // Nettoyer le localStorage
+    localStorage.removeItem("user");
+    localStorage.removeItem("selectedClass");
+    localStorage.removeItem(`userProgress_${userId}`);
+    localStorage.removeItem(`userStreak_${userId}`);
+
+    setUser(null);
+  };
+
   return {
     user,
     loading,
@@ -142,5 +166,6 @@ export function useAuth() {
     signup,
     logout,
     updateUser,
+    deleteAccount,
   };
 }

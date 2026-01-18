@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { AppLayout } from "../components/AppLayout";
+import { AppLayout } from "../../components/AppLayout";
 import { BookOpen, CheckCircle } from "lucide-react";
-import chaptersData from "../data/chapters.json";
-import { useAuth } from "../hooks/useAuth";
-import { useProgress } from "../hooks/useProgress";
+import chaptersData from "../../data/chapters.json";
+import { useAuth } from "../../hooks/useAuth";
+import { useProgress } from "../../hooks/useProgress";
 
 export function ChaptersPage() {
   const { classeId } = useParams<{ classeId: string }>();

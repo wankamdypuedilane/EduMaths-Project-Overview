@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppLayout } from "../components/AppLayout";
+import { AppLayout } from "../../components/AppLayout";
 import { Lock, Eye, EyeOff } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +12,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../components/ui/alert-dialog";
+} from "../../components/ui/alert-dialog";
 
 export function ProfilePage() {
   const { user, updateUser, deleteAccount } = useAuth();

@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { AppLayout } from "../components/AppLayout";
+import { AppLayout } from "../../components/AppLayout";
 import { Atom, ArrowLeft } from "lucide-react";
 
 // ON IMPORTE LES VRAIES DONNÉES DEPUIS LES JSON
-import formulasData from "../data/formulas.json";
-import chaptersData from "../data/chapters.json";
+import formulasData from "../../data/formulas.json";
+import chaptersData from "../../data/chapters.json";
 
 export function FormulasPage() {
   const { chapterId } = useParams<{ chapterId: string }>();
