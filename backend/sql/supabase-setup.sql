@@ -2,7 +2,7 @@
 drop table if exists public.profiles cascade;
 drop table if exists public.exercise_progress cascade;
 drop table if exists public.streaks cascade;
-drop table if exists public.password_reset_tokens cascade;
+-- Note: Pas besoin de table password_reset_tokens, Supabase Auth gère les tokens en interne
 
 -- 2. CRÉATION DES TABLES
 -- Table Profiles
@@ -113,3 +113,18 @@ create policy "Allow authenticated to read streaks" on public.streaks
 grant select on public.profiles to anon;
 grant insert on public.profiles to anon;
 grant select on public.exercise_progress to anon;
+
+-- 9. TRIGGER POUR CRÉATION AUTOMATIQUE DU PROFIL (Correction Erreur 409)
+-- Ce trigger crée le profil automatiquement dès que le compte Auth est créé
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, name)
+  VALUES (new.id, new.email, coalesce(new.raw_user_meta_data->>'name', 'Nouvel élève'));
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();

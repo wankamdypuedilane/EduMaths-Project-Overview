@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calculator, Mail, Lock, User } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { supabase } from "../../lib/supabaseClient";
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -12,14 +13,36 @@ export function SignupPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Fallback: si Supabase signale SIGNED_IN, on avance
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        console.log("Signup fallback: SIGNED_IN -> navigate /terms");
+        setLoading(false);
+        navigate("/terms");
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [navigate]);
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+    const timeout = window.setTimeout(() => {
+      console.warn("Signup timeout (10s)");
+      setError("La création prend plus de temps que prévu. Réessayez.");
+      setLoading(false);
+    }, 10000);
     try {
+      console.log("Signup start", { email });
       await signup(name, email, password);
+      window.clearTimeout(timeout);
+      setLoading(false);
+      console.log("Signup success -> navigate /terms");
       navigate("/terms");
     } catch (err: any) {
+      window.clearTimeout(timeout);
       const message =
         err?.message === "Password should be at least 6 characters."
           ? "Le mot de passe doit contenir au moins 6 caractères."
@@ -28,6 +51,7 @@ export function SignupPage() {
             : err?.message || "Erreur lors de la création du compte. Réessaie.";
       setError(message);
     } finally {
+      window.clearTimeout(timeout);
       setLoading(false);
     }
   };

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import {
   Home,
   TrendingUp,
@@ -8,6 +8,7 @@ import {
   LogOut,
   Calculator,
 } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -17,6 +18,24 @@ interface AppLayoutProps {
 export function AppLayout({ children, activePage }: AppLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, loading } = useAuth();
+
+  // Gestion de l'état de chargement pour éviter le flash
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirection si non authentifié
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
 
   const menuItems = [
     { id: "dashboard", label: "Accueil", icon: Home, path: "/dashboard" },

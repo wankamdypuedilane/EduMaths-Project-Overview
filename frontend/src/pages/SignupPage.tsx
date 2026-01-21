@@ -17,9 +17,22 @@ export function SignupPage() {
     setError("");
     setLoading(true);
     try {
-      await signup(name, email, password);
+      const result = await signup(name, email, password);
+      console.log("Signup result:", result);
+
+      // Redirection après inscription réussie
       navigate("/terms");
     } catch (err: any) {
+      console.error("Signup error:", err);
+
+      // Si c'est une erreur de confirmation email, on affiche un message spécifique
+      if (err?.message?.includes("email")) {
+        setError(
+          "Un email de confirmation a été envoyé. Vérifiez votre boîte mail.",
+        );
+        return;
+      }
+
       const message =
         err?.message === "Password should be at least 6 characters."
           ? "Le mot de passe doit contenir au moins 6 caractères."

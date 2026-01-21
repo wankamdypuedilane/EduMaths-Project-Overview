@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calculator, Mail, Lock } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { supabase } from "../../lib/supabaseClient";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -11,14 +12,36 @@ export function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Fallback: naviguer dès que Supabase signale SIGNED_IN
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        console.log("Auth event SIGNED_IN -> navigate dashboard (fallback)");
+        setLoading(false);
+        navigate("/dashboard");
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+    const timeout = window.setTimeout(() => {
+      console.warn("Login timeout reached (10s)");
+      setError("La connexion prend plus de temps que prévu. Réessayez.");
+      setLoading(false);
+    }, 10000);
     try {
+      console.log("Login attempt starting", { email });
       await login(email, password);
+      console.log("Login success", { email });
+      window.clearTimeout(timeout);
       navigate("/dashboard");
     } catch (err: any) {
+      window.clearTimeout(timeout);
+      console.error("Login error", err);
       const message =
         err?.message === "Email not confirmed"
           ? "Email non confirmé. Vérifie ta boîte mail."
@@ -27,6 +50,7 @@ export function LoginPage() {
             : err?.message || "Erreur de connexion. Réessaie.";
       setError(message);
     } finally {
+      window.clearTimeout(timeout);
       setLoading(false);
     }
   };

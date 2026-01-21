@@ -37,7 +37,11 @@ export function ExercisePage() {
   }
 
   const handleValidate = async () => {
-    if (!exercise || !user || saving) return;
+    if (!exercise || !user?.id || saving) {
+      console.error("Utilisateur non connecté ou exercice invalide");
+      return;
+    }
+
     setSaving(true);
 
     const userAns = answer.trim().toLowerCase();

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { supabase } from "../../lib/supabaseClient";
 
 export function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -13,10 +14,107 @@ export function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
+
+  // Vérifier et charger le token depuis l'URL
+  useEffect(() => {
+    const initSession = async () => {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+
+      console.log("Current URL:", window.location.href);
+      console.log("Access token present:", !!accessToken);
+
+      if (!accessToken) {
+        setError(
+          "Lien invalide ou expiré. Veuillez demander un nouveau lien de réinitialisation.",
+        );
+        return;
+      }
+
+      // Forcer Supabase à charger la session depuis l'URL
+      try {
+        const { data, error: sessionError } = await supabase.auth.getSession();
+        console.log("Session loaded:", { data, sessionError });
+
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          setError("Erreur de session. Veuillez réessayer.");
+          return;
+        }
+
+        // Si aucune session active, tenter un setSession explicite avec les tokens de l'URL
+        if (!data.session && accessToken && refreshToken) {
+          console.warn(
+            "No active session. Trying setSession with URL tokens...",
+          );
+          const { data: setData, error: setErr } =
+            await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+          if (setErr) {
+            console.error("setSession error:", setErr);
+            setError("Impossible d'initialiser la session de récupération.");
+            return;
+          }
+          console.log("setSession result:", { hasSession: !!setData.session });
+        }
+
+        // S'abonner aux changements d'état pour confirmer quand la session est prête
+        const { data: sub } = supabase.auth.onAuthStateChange(
+          (event, session) => {
+            console.log("Auth event:", event, { hasSession: !!session });
+            if (event === "SIGNED_IN" || event === "PASSWORD_RECOVERY") {
+              setSessionReady(true);
+              // Nettoyer le hash pour éviter de retraiter les tokens
+              if (window.location.hash) {
+                history.replaceState(
+                  null,
+                  "",
+                  window.location.pathname + window.location.search,
+                );
+              }
+            }
+
+            // Filet de sécurité: si Supabase signale USER_UPDATED, on considère le reset comme réussi
+            if (event === "USER_UPDATED") {
+              console.log("Auth event USER_UPDATED => mark success");
+              setSuccess(true);
+              setLoading(false);
+            }
+          },
+        );
+
+        // Si la session est déjà présente, on est prêt
+        if ((await supabase.auth.getSession()).data.session) {
+          console.log("Session is ready");
+          setSessionReady(true);
+        }
+
+        // Nettoyage à la sortie
+        return () => {
+          sub.subscription.unsubscribe();
+        };
+      } catch (err) {
+        console.error("Error loading session:", err);
+        setError("Erreur lors du chargement de la session.");
+      }
+    };
+
+    initSession();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Vérifier que la session est prête
+    if (!sessionReady) {
+      setError("Veuillez attendre le chargement de la session...");
+      return;
+    }
 
     // Validation
     if (!newPassword || !confirmPassword) {
@@ -35,18 +133,36 @@ export function ResetPasswordPage() {
     }
 
     setLoading(true);
+    console.log("Form submitted, attempting password reset...");
 
     try {
-      await resetPassword(newPassword);
+      const result = await resetPassword(newPassword);
+      console.log("resetPassword returned:", result);
+      console.log(
+        "Password reset completed successfully, setting success=true",
+      );
       setSuccess(true);
+      console.log("Success state updated to true");
+      // Sécurité: forcer une déconnexion pour exiger une reconnexion propre
+      try {
+        await supabase.auth.signOut();
+        console.log("Signed out after successful password reset");
+      } catch (signOutErr) {
+        console.warn("Sign out failed:", signOutErr);
+      }
     } catch (err: any) {
+      console.error("Password reset error:", err);
+
       // Ignore AbortError - happens when user navigates away
       if (err?.name === "AbortError") {
+        setLoading(false);
         return;
       }
+
       setError(err.message || "Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setLoading(false);
+      console.log("Loading state set to false");
     }
   };
 
@@ -89,6 +205,13 @@ export function ResetPasswordPage() {
         <p className="text-gray-600 mb-8">
           Entrez votre nouveau mot de passe ci-dessous.
         </p>
+
+        {/* Session readiness indicator */}
+        {!sessionReady && (
+          <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg text-sm mb-4">
+            Chargement de la session de récupération...
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* New Password */}
@@ -157,10 +280,14 @@ export function ResetPasswordPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !sessionReady}
             className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Traitement..." : "Réinitialiser le mot de passe"}
+            {loading
+              ? "Traitement..."
+              : !sessionReady
+                ? "Chargement de la session..."
+                : "Réinitialiser le mot de passe"}
           </button>
         </form>
       </div>

@@ -36,60 +36,76 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Fonction pour charger le profil en arrière-plan (non-bloquante)
+  const fetchProfileInBackground = async (userId: string) => {
+    try {
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (profileData) {
+        setUser((current) => (current ? { ...current, ...profileData } : null));
+      }
+    } catch (err) {
+      console.warn("Background profile fetch failed:", err);
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
 
-    const loadSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (!mounted) return;
+    const initAuth = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (!mounted) return;
 
-      if (error) {
-        console.error("Supabase session error", error);
-        setLoading(false);
-        return;
-      }
-
-      if (data.session?.user) {
-        // Fetch user profile from profiles table
-        const { data: profileData, error: profileError } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", data.session.user.id)
-          .maybeSingle();
-
-        if (profileError) {
-          console.error("Error fetching profile:", profileError);
+        if (error) {
+          console.error("Supabase session error", error);
+          setUser(null);
+          setLoading(false);
+          return;
         }
 
-        const activeUser = toUser(data.session?.user, profileData);
-        setUser(activeUser);
-      } else {
+        if (data.session?.user) {
+          // Charger l'user immédiatement, sans bloquer sur le profil
+          const quickUser = toUser(data.session.user);
+          setUser(quickUser);
+          setLoading(false);
+          // Ensuite, charger le profil en arrière-plan
+          if (mounted) {
+            fetchProfileInBackground(data.session.user.id);
+          }
+        } else {
+          setUser(null);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("initAuth error:", err);
         setUser(null);
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_event: AuthChangeEvent, session: Session | null) => {
+      (event: AuthChangeEvent, session: Session | null) => {
         if (session?.user) {
-          const { data: profileData, error: profileError } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", session.user.id)
-            .maybeSingle();
-
-          if (profileError) {
-            console.error("Error fetching profile:", profileError);
+          const quickUser = toUser(session.user);
+          setUser(quickUser);
+          setLoading(false);
+          // Charger le profil en arrière-plan
+          if (mounted) {
+            fetchProfileInBackground(session.user.id);
           }
-
-          setUser(toUser(session?.user, profileData));
         } else {
           setUser(null);
+          setLoading(false);
         }
       },
     );
 
-    loadSession();
+    initAuth();
 
     return () => {
       mounted = false;
@@ -99,6 +115,7 @@ export function useAuth() {
 
   const login = async (email: string, password: string) => {
     setLoading(true);
+    console.log("useAuth.login start", { email });
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -106,16 +123,20 @@ export function useAuth() {
     setLoading(false);
 
     if (error) {
+      console.error("useAuth.login error", error);
       throw error;
     }
 
     const nextUser = toUser(data.session?.user);
     setUser(nextUser);
+    console.log("useAuth.login success", { hasUser: !!nextUser });
     return nextUser;
   };
 
   const signup = async (name: string, email: string, password: string) => {
     setLoading(true);
+    console.log("Starting signup for:", email);
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -125,26 +146,33 @@ export function useAuth() {
           classeId: "6eme",
           isFirstLogin: true,
         },
+        emailRedirectTo: undefined, // Désactiver la redirection email
       },
     });
+
+    console.log("Signup data:", data);
+    console.log("Signup error:", error);
+
     setLoading(false);
 
     if (error) {
       throw error;
     }
 
-    // Create profile entry in profiles table
-    if (data.user) {
-      await supabase.from("profiles").insert({
-        id: data.user.id,
-        email,
-        name,
-        classe_id: "6eme",
-      });
+    // Vérifier si l'utilisateur nécessite une confirmation email
+    if (data.user && !data.session) {
+      console.warn("Email confirmation required");
+      throw new Error(
+        "Veuillez vérifier votre email pour confirmer votre inscription.",
+      );
     }
+
+    // Le profil est maintenant créé automatiquement par le trigger SQL
+    // Plus besoin de l'insertion manuelle qui causait l'erreur 409
 
     const nextUser = toUser(data.user);
     setUser(nextUser);
+    console.log("Signup successful, user:", nextUser);
     return nextUser;
   };
 
@@ -228,8 +256,13 @@ export function useAuth() {
 
   const requestPasswordReset = async (email: string) => {
     try {
+      // Construction de l'URL de redirection avec le protocole correct
+      const redirectUrl = window.location.origin.includes("localhost")
+        ? `http://localhost:${window.location.port || "5173"}/reset-password`
+        : `${window.location.origin}/reset-password`;
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: redirectUrl,
       });
 
       if (error) throw error;
@@ -243,18 +276,58 @@ export function useAuth() {
 
   const resetPassword = async (newPassword: string) => {
     try {
-      const { error } = await supabase.auth.updateUser({
+      console.log("Starting password reset...");
+      console.log("Appel direct à updateUser...");
+
+      // S'assurer que la session de récupération est bien chargée
+      const { data: sessionData, error: sessionErr } =
+        await supabase.auth.getSession();
+      if (sessionErr) {
+        console.error("Session error before update:", sessionErr);
+        throw new Error(
+          "Erreur de session. Veuillez rouvrir le lien de réinitialisation.",
+        );
+      }
+      if (!sessionData?.session?.user) {
+        console.warn("No active session found before password update");
+        throw new Error(
+          "La session de réinitialisation n'est pas prête. Réessayez depuis le lien envoyé par email.",
+        );
+      }
+
+      // Appel DIRECT sans vérification préalable
+      const { data, error } = await supabase.auth.updateUser({
         password: newPassword,
       });
 
-      if (error) throw error;
+      console.log("updateUser completed:", { hasData: !!data, error });
 
+      if (error) {
+        console.error("Update error:", error);
+        throw error;
+      }
+
+      console.log("Password reset successful! Returning true...");
       return true;
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Full error object:", error);
+
       // Don't log AbortError - it's expected when user navigates away
+      if (
+        error?.name === "AbortError" &&
+        error?.message?.includes("aborted without reason")
+      ) {
+        // Ignorer les AbortError silencieux
+        console.warn("AbortError détecté mais ignoré");
+        throw new Error(
+          "La session a expiré. Veuillez demander un nouveau lien.",
+        );
+      }
+
       if (error instanceof Error && error.name === "AbortError") {
         throw error;
       }
+
       console.error("Error resetting password:", error);
       throw error;
     }
