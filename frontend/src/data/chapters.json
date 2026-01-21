@@ -1,0 +1,56 @@
+[
+  {
+    "id": "nombres-entiers-decimaux",
+    "title": "Nombres entiers et décimaux",
+    "description": "Apprendre à lire, écrire et comparer les nombres avec virgule.",
+    "classeIds": ["6eme"],
+    "order": 1,
+    "icon": "hash",
+    "color": "blue"
+  },
+  {
+    "id": "fractions",
+    "title": "Les Fractions",
+    "description": "Comprendre les partages et les quotients.",
+    "classeIds": ["6eme", "5eme"],
+    "order": 2,
+    "icon": "divide",
+    "color": "red"
+  },
+  {
+    "id": "aires-perimetres",
+    "title": "Aires et Périmètres",
+    "description": "Calculer la longueur d'un contour et la surface d'une figure.",
+    "classeIds": ["6eme", "5eme", "4eme"],
+    "order": 3,
+    "icon": "square",
+    "color": "green"
+  },
+  {
+    "id": "geometrie-plane",
+    "title": "Géométrie Plane",
+    "description": "Étude des droites, segments, angles et du cercle.",
+    "classeIds": ["6eme"],
+    "order": 4,
+    "icon": "triangle",
+    "color": "indigo"
+  },
+  {
+    "id": "proportionnalite",
+    "title": "Proportionnalité",
+    "description": "Utiliser les tableaux et les pourcentages.",
+    "classeIds": ["6eme", "5eme"],
+    "order": 5,
+    "icon": "percent",
+    "color": "purple"
+  },
+  {
+    "id": "pensee-informatique",
+    "title": "Pensée Informatique",
+    "description": "Initiation aux algorithmes et à la logique de programmation.",
+    "classeIds": ["6eme"],
+    "order": 6,
+    "icon": "code",
+    "color": "orange"
+  }
+]
