@@ -231,7 +231,7 @@ export function ResetPasswordPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-400 hover:text-gray-600 ml-2"
+                className="text-gray-400 hover:text-gray-600 ml-2 cursor-pointer"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -259,7 +259,7 @@ export function ResetPasswordPage() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="text-gray-400 hover:text-gray-600 ml-2"
+                className="text-gray-400 hover:text-gray-600 ml-2 cursor-pointer"
               >
                 {showConfirmPassword ? (
                   <EyeOff className="w-5 h-5" />
