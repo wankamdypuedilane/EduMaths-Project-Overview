@@ -40,8 +40,9 @@ export function ExercisePage() {
     if (!exercise || !user || saving) return;
     setSaving(true);
 
-    const userAns = answer.trim().toLowerCase();
-    const correctAns = exercise.answer.toLowerCase();
+    // Normaliser les réponses : supprimer TOUS les espaces pour la comparaison
+    const userAns = answer.trim().toLowerCase().replace(/\s+/g, "");
+    const correctAns = exercise.answer.toLowerCase().replace(/\s+/g, "");
 
     const correct = userAns === correctAns;
     setIsCorrect(correct);
@@ -167,18 +168,32 @@ export function ExercisePage() {
                 <span className="font-semibold">Valider ma réponse</span>
               </button>
             ) : (
-              <button
-                onClick={() => {
-                  const selectedClass =
-                    localStorage.getItem("selectedClass") || "6eme";
-                  navigate(`/classes/${selectedClass}/chapters`);
-                }}
-                className=" cursor-pointer w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl flex items-center justify-center shadow-lg hover:bg-gray-900 transition-all"
-              >
-                <span className="text-gray-700 font-semibold">
-                  Continuer vers les chapitres
-                </span>
-              </button>
+              <div className="space-y-3">
+                {!isCorrect && (
+                  <button
+                    onClick={() => {
+                      setShowSolution(false);
+                      setAnswer("");
+                    }}
+                    className="w-full h-12 bg-orange-700 hover:bg-orange-800 active:bg-orange-900 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                  >
+                    <span className="text-xl">🔄</span>
+                    <span className="text-gray-700">Réessayer</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    const selectedClass =
+                      localStorage.getItem("selectedClass") || "6eme";
+                    navigate(`/classes/${selectedClass}/chapters`);
+                  }}
+                  className="cursor-pointer w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl flex items-center justify-center shadow-lg hover:opacity-90 transition-all"
+                >
+                  <span className="font-semibold">
+                    Continuer vers les chapitres
+                  </span>
+                </button>
+              </div>
             )}
 
             <button

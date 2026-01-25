@@ -2,58 +2,196 @@
   {
     "id": "dec-1",
     "chapterId": "nombres-entiers-decimaux",
-    "title": "La partie décimale",
-    "formula": "12,345",
-    "description": "3 est le chiffre des dixièmes, 4 des centièmes, 5 des millièmes.",
+    "title": "Décomposition décimale",
+    "formula": "12,345 = 12 + 3/10 + 4/100 + 5/1000",
+    "description": "Chaque chiffre après la virgule indique des dixièmes, centièmes, millièmes… La valeur de position permet de lire, comparer et arrondir.",
     "tags": ["Décimaux", "Numération"],
     "examples": [
       {
-        "context": "Position du 7 dans 0,75",
-        "calculation": "7 est le chiffre des dixièmes."
+        "context": "0,75",
+        "calculation": "7 est le chiffre des dixièmes, 5 des centièmes."
+      },
+      {
+        "context": "Arrondir 3,486 au centième",
+        "calculation": "3,49 car le chiffre suivant (6) est ≥ 5."
       }
     ]
   },
   {
     "id": "frac-1",
     "chapterId": "fractions",
-    "title": "Fraction Quotient",
-    "formula": "a = b × (a / b)",
-    "description": "La fraction a/b est le nombre qui, multiplié par b, donne a.",
+    "title": "Fraction quotient",
+    "formula": "a/b = a ÷ b",
+    "description": "La fraction représente le quotient de a par b : (a/b) × b = a. Elle peut se placer sur une droite graduée et se simplifier.",
     "tags": ["Fractions", "Division"],
     "examples": [
-      { "context": "4 fois quoi égale 3 ?", "calculation": "4 × (3/4) = 3" }
+      { "context": "4 × (3/4)", "calculation": "4 × 3/4 = 3" },
+      {
+        "context": "Simplifier 6/12",
+        "calculation": "6/12 = (6÷6)/(12÷6) = 1/2"
+      }
     ]
   },
   {
-    "id": "form-aire-rect",
-    "chapterId": "aires-perimetres",
+    "id": "frac-2",
+    "chapterId": "fractions",
+    "title": "Part d'une quantité",
+    "formula": "Part = (k / n) × Q",
+    "description": "Pour prendre k parts sur n d'une quantité Q, on multiplie Q par la fraction k/n.",
+    "tags": ["Fractions", "Proportion"],
+    "examples": [
+      { "context": "3/4 de 20 €", "calculation": "20 × 3/4 = 15 €" },
+      { "context": "2/3 de 12", "calculation": "12 × 2/3 = 8" }
+    ]
+  },
+  {
+    "id": "aire-rect",
+    "chapterId": "aires",
     "title": "Aire du rectangle",
     "formula": "A = L × l",
-    "description": "Multiplier la longueur par la largeur.",
-    "tags": ["Géométrie", "Aire"]
+    "description": "Surface obtenue en multipliant longueur par largeur. Attention aux unités (cm × cm = cm²).",
+    "tags": ["Géométrie", "Aire"],
+    "examples": [
+      { "context": "8 cm × 5 cm", "calculation": "A = 8 × 5 = 40 cm²" }
+    ]
   },
   {
-    "id": "form-diametre",
-    "chapterId": "geometrie-plane",
-    "title": "Cercle : Diamètre",
-    "formula": "D = 2 × r",
-    "description": "Le diamètre est égal à deux fois le rayon.",
-    "tags": ["Cercle", "Géométrie"]
+    "id": "aire-tri",
+    "chapterId": "aires",
+    "title": "Aire du triangle",
+    "formula": "A = (b × h) / 2",
+    "description": "On prend la moitié du produit base × hauteur (hauteur perpendiculaire à la base).",
+    "tags": ["Géométrie", "Aire"],
+    "examples": [
+      {
+        "context": "b = 10 cm, h = 6 cm",
+        "calculation": "A = (10 × 6) / 2 = 30 cm²"
+      }
+    ]
   },
   {
-    "id": "form-prop",
+    "id": "aire-disque",
+    "chapterId": "aires",
+    "title": "Aire du disque",
+    "formula": "A = π × r²",
+    "description": "La surface d'un disque dépend du carré du rayon. Utiliser π ≈ 3,14.",
+    "tags": ["Cercle", "Aire"],
+    "examples": [
+      { "context": "r = 4 cm", "calculation": "A ≈ 3,14 × 4² = 50,24 cm²" }
+    ]
+  },
+  {
+    "id": "perim-cercle",
+    "chapterId": "longueurs",
+    "title": "Circonférence du cercle",
+    "formula": "C = 2 × π × r = π × D",
+    "description": "Le périmètre du cercle se calcule avec le rayon r ou le diamètre D.",
+    "tags": ["Cercle", "Longueur"],
+    "examples": [
+      { "context": "r = 5 cm", "calculation": "C ≈ 2 × 3,14 × 5 = 31,4 cm" }
+    ]
+  },
+  {
+    "id": "perim-rect",
+    "chapterId": "longueurs",
+    "title": "Périmètre du rectangle",
+    "formula": "P = 2 × (L + l)",
+    "description": "Somme des longueurs des 4 côtés d'un rectangle (deux longueurs, deux largeurs).",
+    "tags": ["Longueur", "Périmètre"],
+    "examples": [
+      {
+        "context": "L = 9 cm, l = 5 cm",
+        "calculation": "P = 2 × (9 + 5) = 28 cm"
+      }
+    ]
+  },
+  {
+    "id": "vol-cube",
+    "chapterId": "volumes",
+    "title": "Volume du cube",
+    "formula": "V = c³",
+    "description": "On multiplie l'arête c trois fois. L'unité devient un cube (cm³, m³).",
+    "tags": ["Volume", "Solide"],
+    "examples": [
+      { "context": "c = 3 cm", "calculation": "V = 3 × 3 × 3 = 27 cm³" }
+    ]
+  },
+  {
+    "id": "vol-pave",
+    "chapterId": "volumes",
+    "title": "Volume du pavé droit",
+    "formula": "V = L × l × h",
+    "description": "Produit des trois dimensions : longueur, largeur, hauteur.",
+    "tags": ["Volume", "Solide"],
+    "examples": [
+      {
+        "context": "6 cm × 4 cm × 5 cm",
+        "calculation": "V = 6 × 4 × 5 = 120 cm³"
+      }
+    ]
+  },
+  {
+    "id": "vol-litre",
+    "chapterId": "volumes",
+    "title": "Équivalence litre - cm³",
+    "formula": "1 L = 1000 cm³",
+    "description": "Relation clé entre volume (cm³) et capacité (litre).",
+    "tags": ["Volume", "Conversion"],
+    "examples": [
+      { "context": "2 L en cm³", "calculation": "2 × 1000 = 2000 cm³" }
+    ]
+  },
+  {
+    "id": "prop-1",
     "chapterId": "proportionnalite",
     "title": "Règle de trois",
-    "formula": "(b × c) ÷ a",
-    "description": "Calculer une quatrième proportionnelle.",
-    "tags": ["Proportionnalité"]
+    "formula": "x = (b × c) ÷ a",
+    "description": "Dans un tableau proportionnel (a ↔ b), (c ↔ x), on calcule la quatrième proportionnelle en multipliant en croix puis en divisant.",
+    "tags": ["Proportionnalité", "Pourcentage"],
+    "examples": [
+      {
+        "context": "2 kg → 6 € ; 5 kg → ?",
+        "calculation": "x = (6 × 5) ÷ 2 = 15 €"
+      }
+    ]
   },
   {
-    "id": "form-algo",
+    "id": "prop-2",
+    "chapterId": "proportionnalite",
+    "title": "Pourcentage",
+    "formula": "Part = Total × (p / 100)",
+    "description": "Un pourcentage p% d'un total se calcule en multipliant par p puis en divisant par 100.",
+    "tags": ["Pourcentage", "Proportionnalité"],
+    "examples": [
+      { "context": "25% de 80", "calculation": "80 × 25 / 100 = 20" }
+    ]
+  },
+  {
+    "id": "temps-1",
+    "chapterId": "temps-durees",
+    "title": "Conversions de durées",
+    "formula": "1 h = 60 min ; 1 min = 60 s",
+    "description": "Pour passer des heures aux minutes ou secondes, on multiplie ; pour revenir, on divise.",
+    "tags": ["Temps", "Conversion"],
+    "examples": [
+      {
+        "context": "2 h 30 min en minutes",
+        "calculation": "2 × 60 + 30 = 150 min"
+      }
+    ]
+  },
+  {
+    "id": "algo-1",
     "chapterId": "pensee-informatique",
-    "title": "La Boucle 'Répéter'",
-    "formula": "Nombre de tours × Instructions",
-    "description": "Permet de reproduire une action plusieurs fois.",
-    "tags": ["Algorithme", "Scratch"]
+    "title": "Boucle 'répéter n fois'",
+    "formula": "Répéter n fois : bloc d'instructions",
+    "description": "Une boucle exécute le même bloc plusieurs fois. Utile pour tracer des figures régulières ou répéter une action.",
+    "tags": ["Algorithme", "Répétition"],
+    "examples": [
+      {
+        "context": "Tracer un carré de côté 10",
+        "calculation": "Répéter 4 fois : avancer 10 ; tourner 90°"
+      }
+    ]
   }
 ]

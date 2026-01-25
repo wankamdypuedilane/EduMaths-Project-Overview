@@ -6,28 +6,698 @@
     "question": "Quel est le chiffre des centièmes dans 14,567 ?",
     "answer": "6",
     "unit": "",
-    "solution": "Dans 14,567 : 5 est le chiffre des dixièmes, 6 est celui des centièmes et 7 celui des millièmes.",
+    "solution": "14,567 = 14 + 5/10 + 6/100 + 7/1000. Le centième est le 2ᵉ chiffre après la virgule : 6.",
     "hints": ["Le deuxième chiffre après la virgule."]
   },
   {
+    "id": "dec-ex-2",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "facile",
+    "question": "Écris le nombre trois cent vingt-quatre virgule cinq en chiffres.",
+    "answer": "324,5",
+    "unit": "",
+    "solution": "Partie entière : 324. Partie décimale : 0,5. On assemble 324 et ,5 → 324,5.",
+    "hints": ["Pense à séparer la partie entière et décimale."]
+  },
+  {
+    "id": "dec-ex-3",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "facile",
+    "question": "Range dans l'ordre croissant : 5,3 ; 5,03 ; 5,33",
+    "answer": "5,03 ; 5,3 ; 5,33",
+    "unit": "",
+    "solution": "Complète 5,3 en 5,30 pour comparer : 5,03 < 5,30 < 5,33 donc ordre croissant = 5,03 ; 5,3 ; 5,33.",
+    "hints": ["Compare chiffre par chiffre après la virgule."]
+  },
+  {
+    "id": "dec-ex-4",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "moyen",
+    "question": "Calcule 23,5 + 14,8",
+    "answer": "38,3",
+    "unit": "",
+    "solution": "Aligne les virgules : 23,5\n+ 14,8\n= 38,3. On additionne unités (23+14) puis dixièmes (0,5+0,8=1,3) → 38,3.",
+    "hints": ["Aligne les virgules avant d'additionner."]
+  },
+  {
+    "id": "dec-ex-5",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "moyen",
+    "question": "Calcule 45,6 - 12,3",
+    "answer": "33,3",
+    "unit": "",
+    "solution": "Aligne les virgules : 45,6 - 12,3. Soustrais unités (45-12=33) et dixièmes (0,6-0,3=0,3) → 33,3.",
+    "hints": ["Soustrais les dixièmes et les unités séparément."]
+  },
+  {
+    "id": "dec-ex-6",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "moyen",
+    "question": "Multiplie 3,5 par 10",
+    "answer": "35",
+    "unit": "",
+    "solution": "Multiplier par 10 décale la virgule d'un rang à droite : 3,5 → 35.",
+    "hints": ["Multiplier par 10 décale la virgule."]
+  },
+  {
+    "id": "dec-ex-7",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "moyen",
+    "question": "Divise 48 par 10",
+    "answer": "4,8",
+    "unit": "",
+    "solution": "Diviser par 10 décale la virgule d'un rang à gauche : 48 → 4,8.",
+    "hints": ["Diviser par 10 décale la virgule."]
+  },
+  {
+    "id": "dec-ex-8",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "difficile",
+    "question": "Arrondis 67,849 au dixième près.",
+    "answer": "67,8",
+    "unit": "",
+    "solution": "On arrondit au dixième : on regarde le centième (4). Comme 4 < 5, on abaisse et on garde 67,8.",
+    "hints": ["Regarde le chiffre des centièmes."]
+  },
+  {
+    "id": "dec-ex-9",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "difficile",
+    "question": "Calcule 12,5 × 4",
+    "answer": "50",
+    "unit": "",
+    "solution": "Décompose 12,5 = 12 + 0,5. 12 × 4 = 48 et 0,5 × 4 = 2. Somme = 48 + 2 = 50.",
+    "hints": ["Décompose 12,5 en 12 + 0,5."]
+  },
+  {
+    "id": "dec-ex-10",
+    "chapterId": "nombres-entiers-decimaux",
+    "difficulty": "difficile",
+    "question": "Quelle est la partie décimale de 145,672 ?",
+    "answer": "0,672",
+    "unit": "",
+    "solution": "Sépare partie entière (145) et partie décimale (tout après la virgule). Ici la partie décimale est 0,672.",
+    "hints": ["C'est ce qui vient après la virgule."]
+  },
+  {
     "id": "frac-ex-1",
+    "chapterId": "fractions",
+    "difficulty": "facile",
+    "question": "Quelle fraction représente 1 part sur 4 ?",
+    "answer": "1/4",
+    "unit": "",
+    "solution": "Une fraction s'écrit (parts prises)/(parts totales). Pour 1 part sur 4 : 1/4.",
+    "hints": ["Nombre de parts sur total de parts."]
+  },
+  {
+    "id": "frac-ex-2",
+    "chapterId": "fractions",
+    "difficulty": "facile",
+    "question": "Calcule la moitié de 18.",
+    "answer": "9",
+    "unit": "",
+    "solution": "La moitié c'est diviser par 2 : 18 ÷ 2 = 9.",
+    "hints": ["La moitié = diviser par 2."]
+  },
+  {
+    "id": "frac-ex-3",
+    "chapterId": "fractions",
+    "difficulty": "facile",
+    "question": "Quelle est la fraction de 3 parts sur 5 ?",
+    "answer": "3/5",
+    "unit": "",
+    "solution": "Numérateur = parts prises (3), dénominateur = total (5). Fraction = 3/5.",
+    "hints": ["Numérateur = parts prises, dénominateur = total."]
+  },
+  {
+    "id": "frac-ex-4",
+    "chapterId": "fractions",
+    "difficulty": "moyen",
+    "question": "Calcule les 2/3 de 12.",
+    "answer": "8",
+    "unit": "",
+    "solution": "2/3 de 12 = 12 × 2/3. Méthode : divise d'abord par 3 → 4, puis multiplie par 2 → 8.",
+    "hints": ["Divise par le dénominateur, multiplie par le numérateur."]
+  },
+  {
+    "id": "frac-ex-5",
     "chapterId": "fractions",
     "difficulty": "moyen",
     "question": "Calcule les 3/4 de 20 €.",
     "answer": "15",
     "unit": "€",
-    "solution": "(20 ÷ 4) × 3 = 5 × 3 = 15 €.",
+    "solution": "3/4 de 20 = 20 × 3/4. Divise par 4 → 5, puis multiplie par 3 → 15 €.",
     "hints": ["Divise d'abord 20 par 4, puis multiplie par 3."]
   },
   {
-    "id": "aire-ex-1",
-    "chapterId": "aires-perimetres",
+    "id": "frac-ex-6",
+    "chapterId": "fractions",
+    "difficulty": "moyen",
+    "question": "Simplifie la fraction 6/12.",
+    "answer": "1/2",
+    "unit": "",
+    "solution": "Simplifie par le plus grand diviseur commun 6 : 6/12 = (6÷6)/(12÷6) = 1/2.",
+    "hints": ["Trouve le diviseur commun (ici 6)."]
+  },
+  {
+    "id": "frac-ex-7",
+    "chapterId": "fractions",
+    "difficulty": "moyen",
+    "question": "Compare 1/2 et 1/3. Laquelle est la plus grande ?",
+    "answer": "1/2",
+    "unit": "",
+    "solution": "Compare les valeurs décimales : 1/2 = 0,5 ; 1/3 ≈ 0,33. 0,5 est plus grand, donc 1/2 > 1/3.",
+    "hints": ["Plus le dénominateur est grand, plus les parts sont petites."]
+  },
+  {
+    "id": "frac-ex-8",
+    "chapterId": "fractions",
+    "difficulty": "difficile",
+    "question": "Calcule 1/2 + 1/4.",
+    "answer": "3/4",
+    "unit": "",
+    "solution": "Mets au même dénominateur : 1/2 = 2/4. Addition : 2/4 + 1/4 = 3/4.",
+    "hints": ["Mets au même dénominateur."]
+  },
+  {
+    "id": "frac-ex-9",
+    "chapterId": "fractions",
+    "difficulty": "difficile",
+    "question": "Écris 7/4 sous forme de nombre mixte.",
+    "answer": "1 et 3/4",
+    "unit": "",
+    "solution": "Divise 7 par 4 : on fait 1 entier et il reste 3. Donc 7/4 = 1 + 3/4.",
+    "hints": ["Combien de fois 4 dans 7 ?"]
+  },
+  {
+    "id": "frac-ex-10",
+    "chapterId": "fractions",
+    "difficulty": "difficile",
+    "question": "Quelle fraction de 24 est égale à 18 ?",
+    "answer": "3/4",
+    "unit": "",
+    "solution": "Écris 18/24 puis simplifie par 6 : (18÷6)/(24÷6) = 3/4.",
+    "hints": ["Écris 18/24 et simplifie."]
+  },
+  {
+    "id": "alg-ex-1",
+    "chapterId": "algebre",
     "difficulty": "facile",
-    "question": "Calculer l'aire d'un rectangle de longueur 8 cm et de largeur 5 cm.",
+    "question": "Si x = 5, calcule x + 3.",
+    "answer": "8",
+    "unit": "",
+    "solution": "Remplace x par 5 : x + 3 = 5 + 3 = 8.",
+    "hints": ["Remplace x par sa valeur."]
+  },
+  {
+    "id": "alg-ex-2",
+    "chapterId": "algebre",
+    "difficulty": "facile",
+    "question": "Si a = 7, calcule 2 × a.",
+    "answer": "14",
+    "unit": "",
+    "solution": "Remplace a par 7 puis multiplie : 2 × 7 = 14.",
+    "hints": ["Multiplie 2 par la valeur de a."]
+  },
+  {
+    "id": "alg-ex-3",
+    "chapterId": "algebre",
+    "difficulty": "facile",
+    "question": "Complète : 5 + ... = 12",
+    "answer": "7",
+    "unit": "",
+    "solution": "On cherche le nombre qui manque : 5 + ? = 12 ⇒ ? = 12 - 5 = 7.",
+    "hints": ["Quelle valeur ajouter à 5 pour obtenir 12 ?"]
+  },
+  {
+    "id": "alg-ex-4",
+    "chapterId": "algebre",
+    "difficulty": "moyen",
+    "question": "Si n = 4, calcule 3 × n - 2.",
+    "answer": "10",
+    "unit": "",
+    "solution": "Priorité à la multiplication : 3 × 4 = 12, puis 12 - 2 = 10.",
+    "hints": ["Multiplie d'abord, puis soustrais."]
+  },
+  {
+    "id": "alg-ex-5",
+    "chapterId": "algebre",
+    "difficulty": "moyen",
+    "question": "Trouve x si x + 8 = 15.",
+    "answer": "7",
+    "unit": "",
+    "solution": "Isoler x : x + 8 = 15 ⇒ x = 15 - 8 = 7.",
+    "hints": ["Soustrais 8 des deux côtés."]
+  },
+  {
+    "id": "alg-ex-6",
+    "chapterId": "algebre",
+    "difficulty": "moyen",
+    "question": "Si y = 6, calcule y × 2 + 5.",
+    "answer": "17",
+    "unit": "",
+    "solution": "Calcule le produit puis ajoute : 6 × 2 = 12 ; 12 + 5 = 17.",
+    "hints": ["Effectue la multiplication en premier."]
+  },
+  {
+    "id": "alg-ex-7",
+    "chapterId": "algebre",
+    "difficulty": "moyen",
+    "question": "Trouve a si 2 × a = 18.",
+    "answer": "9",
+    "unit": "",
+    "solution": "Isoler a : 2 × a = 18 ⇒ a = 18 ÷ 2 = 9.",
+    "hints": ["Divise 18 par 2."]
+  },
+  {
+    "id": "alg-ex-8",
+    "chapterId": "algebre",
+    "difficulty": "difficile",
+    "question": "Si b = 3, calcule 4 × b + 2 × b.",
+    "answer": "18",
+    "unit": "",
+    "solution": "Calcule chaque terme : 4 × 3 = 12, 2 × 3 = 6, somme = 18.",
+    "hints": ["Calcule chaque terme séparément."]
+  },
+  {
+    "id": "alg-ex-9",
+    "chapterId": "algebre",
+    "difficulty": "difficile",
+    "question": "Trouve m si 3 × m - 5 = 10.",
+    "answer": "5",
+    "unit": "",
+    "solution": "Ajoute 5 aux deux côtés : 3m = 15. Puis divise par 3 : m = 15 ÷ 3 = 5.",
+    "hints": ["Ajoute 5 aux deux côtés d'abord."]
+  },
+  {
+    "id": "alg-ex-10",
+    "chapterId": "algebre",
+    "difficulty": "difficile",
+    "question": "Simplifie l'expression 2x + 3x.",
+    "answer": "5x",
+    "unit": "",
+    "solution": "On additionne les termes en x : 2x + 3x = (2 + 3)x = 5x.",
+    "hints": ["2 termes de x + 3 termes de x = ?"]
+  },
+  {
+    "id": "long-ex-1",
+    "chapterId": "longueurs",
+    "difficulty": "facile",
+    "question": "Convertis 3 m en cm.",
+    "answer": "300",
+    "unit": "cm",
+    "solution": "1 m = 100 cm, donc 3 m = 3 × 100 = 300 cm.",
+    "hints": ["Multiplie par 100."]
+  },
+  {
+    "id": "long-ex-2",
+    "chapterId": "longueurs",
+    "difficulty": "facile",
+    "question": "Convertis 2000 m en km.",
+    "answer": "2",
+    "unit": "km",
+    "solution": "1 km = 1000 m, donc 2000 m = 2000 ÷ 1000 = 2 km.",
+    "hints": ["Divise par 1000."]
+  },
+  {
+    "id": "long-ex-3",
+    "chapterId": "longueurs",
+    "difficulty": "facile",
+    "question": "Quelle est la longueur d'un segment de 45 mm en cm ?",
+    "answer": "4,5",
+    "unit": "cm",
+    "solution": "1 cm = 10 mm, donc 45 mm = 45 ÷ 10 = 4,5 cm.",
+    "hints": ["Divise par 10."]
+  },
+  {
+    "id": "long-ex-4",
+    "chapterId": "longueurs",
+    "difficulty": "moyen",
+    "question": "Calcule le périmètre d'un carré de côté 7 cm.",
+    "answer": "28",
+    "unit": "cm",
+    "solution": "Périmètre = 4 × côté = 4 × 7 = 28 cm.",
+    "hints": ["Un carré a 4 côtés égaux."]
+  },
+  {
+    "id": "long-ex-5",
+    "chapterId": "longueurs",
+    "difficulty": "moyen",
+    "question": "Calcule le périmètre d'un rectangle de longueur 9 cm et largeur 5 cm.",
+    "answer": "28",
+    "unit": "cm",
+    "solution": "Périmètre = 2 × (L + l) = 2 × (9 + 5) = 2 × 14 = 28 cm.",
+    "hints": ["Périmètre = somme de tous les côtés."]
+  },
+  {
+    "id": "long-ex-6",
+    "chapterId": "longueurs",
+    "difficulty": "moyen",
+    "question": "Convertis 5,6 km en m.",
+    "answer": "5600",
+    "unit": "m",
+    "solution": "5,6 km = 5,6 × 1000 = 5600 m.",
+    "hints": ["Multiplie par 1000."]
+  },
+  {
+    "id": "long-ex-7",
+    "chapterId": "longueurs",
+    "difficulty": "moyen",
+    "question": "Quelle est la distance en mètres d'un chemin de 2,5 km ?",
+    "answer": "2500",
+    "unit": "m",
+    "solution": "2,5 km = 2,5 × 1000 = 2500 m.",
+    "hints": ["1 km = 1000 m."]
+  },
+  {
+    "id": "long-ex-8",
+    "chapterId": "longueurs",
+    "difficulty": "difficile",
+    "question": "Un polygone a 6 côtés égaux de 4 cm chacun. Quel est son périmètre ?",
+    "answer": "24",
+    "unit": "cm",
+    "solution": "Périmètre = 6 × 4 = 24 cm.",
+    "hints": ["Multiplie le nombre de côtés par la longueur."]
+  },
+  {
+    "id": "long-ex-9",
+    "chapterId": "longueurs",
+    "difficulty": "difficile",
+    "question": "Convertis 350 cm en mètres.",
+    "answer": "3,5",
+    "unit": "m",
+    "solution": "350 cm = 350 ÷ 100 = 3,5 m.",
+    "hints": ["Divise par 100."]
+  },
+  {
+    "id": "long-ex-10",
+    "chapterId": "longueurs",
+    "difficulty": "difficile",
+    "question": "La circonférence d'un cercle de rayon 5 cm est d'environ combien ? (π ≈ 3,14)",
+    "answer": "31,4",
+    "unit": "cm",
+    "solution": "Circonférence = 2 × π × r = 2 × 3,14 × 5 = 31,4 cm.",
+    "hints": ["Utilise la formule 2πr."]
+  },
+  {
+    "id": "aire-ex-1",
+    "chapterId": "aires",
+    "difficulty": "facile",
+    "question": "Calcule l'aire d'un rectangle de longueur 8 cm et de largeur 5 cm.",
     "answer": "40",
     "unit": "cm²",
     "solution": "Aire = Longueur × Largeur = 8 × 5 = 40 cm².",
     "hints": ["Utilise la formule A = L × l."]
+  },
+  {
+    "id": "aire-ex-2",
+    "chapterId": "aires",
+    "difficulty": "facile",
+    "question": "Quelle est l'aire d'un carré de côté 6 cm ?",
+    "answer": "36",
+    "unit": "cm²",
+    "solution": "Aire = côté² = 6 × 6 = 36 cm².",
+    "hints": ["Multiplie le côté par lui-même."]
+  },
+  {
+    "id": "aire-ex-3",
+    "chapterId": "aires",
+    "difficulty": "facile",
+    "question": "Calcule l'aire d'un rectangle de 10 m sur 4 m.",
+    "answer": "40",
+    "unit": "m²",
+    "solution": "Aire = 10 × 4 = 40 m².",
+    "hints": ["Longueur × largeur."]
+  },
+  {
+    "id": "aire-ex-4",
+    "chapterId": "aires",
+    "difficulty": "moyen",
+    "question": "Un terrain rectangulaire fait 25 m de long et 12 m de large. Quelle est son aire ?",
+    "answer": "300",
+    "unit": "m²",
+    "solution": "Aire = 25 × 12 = 300 m².",
+    "hints": ["Multiplie longueur par largeur."]
+  },
+  {
+    "id": "aire-ex-5",
+    "chapterId": "aires",
+    "difficulty": "moyen",
+    "question": "Quelle est l'aire d'un triangle de base 10 cm et hauteur 6 cm ?",
+    "answer": "30",
+    "unit": "cm²",
+    "solution": "Aire = (base × hauteur) ÷ 2 = (10 × 6) ÷ 2 = 30 cm².",
+    "hints": ["Formule du triangle : (b × h) / 2."]
+  },
+  {
+    "id": "aire-ex-6",
+    "chapterId": "aires",
+    "difficulty": "moyen",
+    "question": "Un carré a un périmètre de 20 cm. Quelle est son aire ?",
+    "answer": "25",
+    "unit": "cm²",
+    "solution": "Côté = 20 ÷ 4 = 5 cm. Aire = 5² = 25 cm².",
+    "hints": ["Trouve d'abord le côté."]
+  },
+  {
+    "id": "aire-ex-7",
+    "chapterId": "aires",
+    "difficulty": "moyen",
+    "question": "Calcule l'aire d'un rectangle de 7,5 m sur 4 m.",
+    "answer": "30",
+    "unit": "m²",
+    "solution": "Aire = 7,5 × 4 = 30 m².",
+    "hints": ["Multiplie les dimensions."]
+  },
+  {
+    "id": "aire-ex-8",
+    "chapterId": "aires",
+    "difficulty": "difficile",
+    "question": "L'aire d'un rectangle est 48 cm². Sa longueur est 8 cm. Quelle est sa largeur ?",
+    "answer": "6",
+    "unit": "cm",
+    "solution": "Largeur = Aire ÷ Longueur = 48 ÷ 8 = 6 cm.",
+    "hints": ["Aire = L × l, donc l = Aire ÷ L."]
+  },
+  {
+    "id": "aire-ex-9",
+    "chapterId": "aires",
+    "difficulty": "difficile",
+    "question": "Quelle est l'aire d'un disque de rayon 4 cm ? (π ≈ 3,14)",
+    "answer": "50,24",
+    "unit": "cm²",
+    "solution": "Aire = π × r² = 3,14 × 4² = 3,14 × 16 = 50,24 cm².",
+    "hints": ["Formule : πr²."]
+  },
+  {
+    "id": "aire-ex-10",
+    "chapterId": "aires",
+    "difficulty": "difficile",
+    "question": "Un triangle a une base de 12 cm et une aire de 54 cm². Quelle est sa hauteur ?",
+    "answer": "9",
+    "unit": "cm",
+    "solution": "Aire = (b × h) ÷ 2, donc h = (Aire × 2) ÷ b = (54 × 2) ÷ 12 = 9 cm.",
+    "hints": ["Réarrange la formule du triangle."]
+  },
+  {
+    "id": "vol-ex-1",
+    "chapterId": "volumes",
+    "difficulty": "facile",
+    "question": "Quel est le volume d'un cube de côté 3 cm ?",
+    "answer": "27",
+    "unit": "cm³",
+    "solution": "Volume = côté³ = 3 × 3 × 3 = 27 cm³.",
+    "hints": ["Multiplie le côté 3 fois."]
+  },
+  {
+    "id": "vol-ex-2",
+    "chapterId": "volumes",
+    "difficulty": "facile",
+    "question": "Calcule le volume d'un pavé de dimensions 4 cm, 3 cm, 2 cm.",
+    "answer": "24",
+    "unit": "cm³",
+    "solution": "Volume = L × l × h = 4 × 3 × 2 = 24 cm³.",
+    "hints": ["Multiplie les trois dimensions."]
+  },
+  {
+    "id": "vol-ex-3",
+    "chapterId": "volumes",
+    "difficulty": "facile",
+    "question": "Quel est le volume d'un cube de 5 cm de côté ?",
+    "answer": "125",
+    "unit": "cm³",
+    "solution": "Volume = 5³ = 5 × 5 × 5 = 125 cm³.",
+    "hints": ["5 × 5 × 5."]
+  },
+  {
+    "id": "vol-ex-4",
+    "chapterId": "volumes",
+    "difficulty": "moyen",
+    "question": "Calcule le volume d'un pavé droit de 6 cm sur 4 cm sur 5 cm.",
+    "answer": "120",
+    "unit": "cm³",
+    "solution": "Volume = 6 × 4 × 5 = 120 cm³.",
+    "hints": ["Longueur × largeur × hauteur."]
+  },
+  {
+    "id": "vol-ex-5",
+    "chapterId": "volumes",
+    "difficulty": "moyen",
+    "question": "Un aquarium cubique a un côté de 20 cm. Quel est son volume ?",
+    "answer": "8000",
+    "unit": "cm³",
+    "solution": "Volume = 20³ = 20 × 20 × 20 = 8000 cm³.",
+    "hints": ["C'est un cube."]
+  },
+  {
+    "id": "vol-ex-6",
+    "chapterId": "volumes",
+    "difficulty": "moyen",
+    "question": "Convertis 2 litres en cm³.",
+    "answer": "2000",
+    "unit": "cm³",
+    "solution": "1 litre = 1000 cm³, donc 2 litres = 2000 cm³.",
+    "hints": ["1 L = 1000 cm³."]
+  },
+  {
+    "id": "vol-ex-7",
+    "chapterId": "volumes",
+    "difficulty": "moyen",
+    "question": "Quel est le volume en litres d'un pavé de 10 cm × 10 cm × 10 cm ?",
+    "answer": "1",
+    "unit": "L",
+    "solution": "Volume = 10³ = 1000 cm³ = 1 litre.",
+    "hints": ["1000 cm³ = 1 L."]
+  },
+  {
+    "id": "vol-ex-8",
+    "chapterId": "volumes",
+    "difficulty": "difficile",
+    "question": "Un pavé a un volume de 60 cm³. Sa base fait 12 cm². Quelle est sa hauteur ?",
+    "answer": "5",
+    "unit": "cm",
+    "solution": "Hauteur = Volume ÷ Aire base = 60 ÷ 12 = 5 cm.",
+    "hints": ["Volume = Aire base × hauteur."]
+  },
+  {
+    "id": "vol-ex-9",
+    "chapterId": "volumes",
+    "difficulty": "difficile",
+    "question": "Convertis 5000 cm³ en litres.",
+    "answer": "5",
+    "unit": "L",
+    "solution": "5000 cm³ = 5000 ÷ 1000 = 5 litres.",
+    "hints": ["Divise par 1000."]
+  },
+  {
+    "id": "vol-ex-10",
+    "chapterId": "volumes",
+    "difficulty": "difficile",
+    "question": "Combien de cubes de 2 cm de côté peut-on placer dans un cube de 6 cm de côté ?",
+    "answer": "27",
+    "unit": "cubes",
+    "solution": "6 ÷ 2 = 3 cubes par dimension. 3 × 3 × 3 = 27 cubes.",
+    "hints": ["Combien de fois 2 dans 6 ?"]
+  },
+  {
+    "id": "temps-ex-1",
+    "chapterId": "temps-durees",
+    "difficulty": "facile",
+    "question": "Combien d'heures y a-t-il dans une journée ?",
+    "answer": "24",
+    "unit": "h",
+    "solution": "Une journée = 24 heures.",
+    "hints": ["Pense au cadran de l'horloge."]
+  },
+  {
+    "id": "temps-ex-2",
+    "chapterId": "temps-durees",
+    "difficulty": "facile",
+    "question": "Convertis 2 heures en minutes.",
+    "answer": "120",
+    "unit": "min",
+    "solution": "1 h = 60 min, donc 2 h = 2 × 60 = 120 min.",
+    "hints": ["Multiplie par 60."]
+  },
+  {
+    "id": "temps-ex-3",
+    "chapterId": "temps-durees",
+    "difficulty": "facile",
+    "question": "Combien de minutes y a-t-il dans une heure ?",
+    "answer": "60",
+    "unit": "min",
+    "solution": "1 heure = 60 minutes.",
+    "hints": ["C'est une conversion de base."]
+  },
+  {
+    "id": "temps-ex-4",
+    "chapterId": "temps-durees",
+    "difficulty": "moyen",
+    "question": "Il est 9h30. Quelle heure sera-t-il dans 2 heures 15 minutes ?",
+    "answer": "11h45",
+    "unit": "",
+    "solution": "9h30 + 2h = 11h30, + 15 min = 11h45.",
+    "hints": ["Ajoute les heures, puis les minutes."]
+  },
+  {
+    "id": "temps-ex-5",
+    "chapterId": "temps-durees",
+    "difficulty": "moyen",
+    "question": "Calcule la durée entre 8h15 et 10h45.",
+    "answer": "2h30",
+    "unit": "",
+    "solution": "10h45 - 8h15 = 2h30.",
+    "hints": ["Soustrais les heures et les minutes."]
+  },
+  {
+    "id": "temps-ex-6",
+    "chapterId": "temps-durees",
+    "difficulty": "moyen",
+    "question": "Convertis 3h30 en minutes.",
+    "answer": "210",
+    "unit": "min",
+    "solution": "3 h = 180 min, 30 min = 30 min. Total = 210 min.",
+    "hints": ["3 × 60 + 30."]
+  },
+  {
+    "id": "temps-ex-7",
+    "chapterId": "temps-durees",
+    "difficulty": "moyen",
+    "question": "Combien de jours y a-t-il en février (année non bissextile) ?",
+    "answer": "28",
+    "unit": "jours",
+    "solution": "Février a 28 jours les années non bissextiles.",
+    "hints": ["Le mois le plus court."]
+  },
+  {
+    "id": "temps-ex-8",
+    "chapterId": "temps-durees",
+    "difficulty": "difficile",
+    "question": "Un film commence à 14h25 et dure 1h50. À quelle heure se termine-t-il ?",
+    "answer": "16h15",
+    "unit": "",
+    "solution": "14h25 + 1h50 = 16h15.",
+    "hints": ["Ajoute 1h puis 50 min."]
+  },
+  {
+    "id": "temps-ex-9",
+    "chapterId": "temps-durees",
+    "difficulty": "difficile",
+    "question": "Convertis 150 minutes en heures et minutes.",
+    "answer": "2h30",
+    "unit": "",
+    "solution": "150 ÷ 60 = 2 reste 30, donc 2h30.",
+    "hints": ["Divise par 60."]
+  },
+  {
+    "id": "temps-ex-10",
+    "chapterId": "temps-durees",
+    "difficulty": "difficile",
+    "question": "Combien de secondes y a-t-il dans 5 minutes ?",
+    "answer": "300",
+    "unit": "s",
+    "solution": "1 min = 60 s, donc 5 min = 5 × 60 = 300 s.",
+    "hints": ["Multiplie par 60."]
   },
   {
     "id": "geo-ex-1",
@@ -40,7 +710,427 @@
     "hints": ["Diamètre = 2 × Rayon."]
   },
   {
+    "id": "geo-ex-2",
+    "chapterId": "geometrie-plane",
+    "difficulty": "facile",
+    "question": "Combien d'angles a un triangle ?",
+    "answer": "3",
+    "unit": "",
+    "solution": "Un triangle a 3 angles.",
+    "hints": ["Tri- signifie trois."]
+  },
+  {
+    "id": "geo-ex-3",
+    "chapterId": "geometrie-plane",
+    "difficulty": "facile",
+    "question": "Quelle est la somme des angles d'un triangle ?",
+    "answer": "180",
+    "unit": "°",
+    "solution": "La somme des angles d'un triangle est toujours 180°.",
+    "hints": ["C'est une propriété fondamentale."]
+  },
+  {
+    "id": "geo-ex-4",
+    "chapterId": "geometrie-plane",
+    "difficulty": "moyen",
+    "question": "Un triangle a deux angles de 50° et 60°. Quel est le troisième angle ?",
+    "answer": "70",
+    "unit": "°",
+    "solution": "180° - 50° - 60° = 70°.",
+    "hints": ["La somme des trois angles = 180°."]
+  },
+  {
+    "id": "geo-ex-5",
+    "chapterId": "geometrie-plane",
+    "difficulty": "moyen",
+    "question": "Deux droites perpendiculaires forment quel type d'angle ?",
+    "answer": "90",
+    "unit": "°",
+    "solution": "Deux droites perpendiculaires forment un angle droit de 90°.",
+    "hints": ["Un angle droit."]
+  },
+  {
+    "id": "geo-ex-6",
+    "chapterId": "geometrie-plane",
+    "difficulty": "moyen",
+    "question": "Combien de côtés a un hexagone ?",
+    "answer": "6",
+    "unit": "",
+    "solution": "Un hexagone a 6 côtés.",
+    "hints": ["Hexa- vient du grec pour six."]
+  },
+  {
+    "id": "geo-ex-7",
+    "chapterId": "geometrie-plane",
+    "difficulty": "moyen",
+    "question": "Un angle de 45° est-il aigu, droit ou obtus ?",
+    "answer": "aigu",
+    "unit": "",
+    "solution": "Un angle inférieur à 90° est un angle aigu.",
+    "hints": ["< 90° = aigu."]
+  },
+  {
+    "id": "geo-ex-8",
+    "chapterId": "geometrie-plane",
+    "difficulty": "difficile",
+    "question": "Dans un triangle isocèle, deux angles mesurent 50° chacun. Quel est le troisième ?",
+    "answer": "80",
+    "unit": "°",
+    "solution": "180° - 50° - 50° = 80°.",
+    "hints": ["Somme = 180°."]
+  },
+  {
+    "id": "geo-ex-9",
+    "chapterId": "geometrie-plane",
+    "difficulty": "difficile",
+    "question": "Quelle est la mesure d'un angle plat ?",
+    "answer": "180",
+    "unit": "°",
+    "solution": "Un angle plat mesure 180°.",
+    "hints": ["C'est une ligne droite."]
+  },
+  {
+    "id": "geo-ex-10",
+    "chapterId": "geometrie-plane",
+    "difficulty": "difficile",
+    "question": "Un cercle a un diamètre de 12 cm. Quel est son rayon ?",
+    "answer": "6",
+    "unit": "cm",
+    "solution": "Rayon = Diamètre ÷ 2 = 12 ÷ 2 = 6 cm.",
+    "hints": ["Rayon = Diamètre / 2."]
+  },
+  {
+    "id": "esp-ex-1",
+    "chapterId": "vision-espace",
+    "difficulty": "facile",
+    "question": "Combien de faces a un cube ?",
+    "answer": "6",
+    "unit": "",
+    "solution": "Un cube a 6 faces carrées.",
+    "hints": ["Compte les faces visibles et cachées."]
+  },
+  {
+    "id": "esp-ex-2",
+    "chapterId": "vision-espace",
+    "difficulty": "facile",
+    "question": "Combien d'arêtes a un cube ?",
+    "answer": "12",
+    "unit": "",
+    "solution": "Un cube a 12 arêtes.",
+    "hints": ["Compte les lignes qui forment le cube."]
+  },
+  {
+    "id": "esp-ex-3",
+    "chapterId": "vision-espace",
+    "difficulty": "facile",
+    "question": "Combien de sommets a un cube ?",
+    "answer": "8",
+    "unit": "",
+    "solution": "Un cube a 8 sommets (coins).",
+    "hints": ["Compte les coins."]
+  },
+  {
+    "id": "esp-ex-4",
+    "chapterId": "vision-espace",
+    "difficulty": "moyen",
+    "question": "Quelle est la forme des faces d'un pavé droit ?",
+    "answer": "rectangles",
+    "unit": "",
+    "solution": "Les faces d'un pavé droit sont des rectangles.",
+    "hints": ["Pense à une boîte."]
+  },
+  {
+    "id": "esp-ex-5",
+    "chapterId": "vision-espace",
+    "difficulty": "moyen",
+    "question": "Combien de faces a une pyramide à base carrée ?",
+    "answer": "5",
+    "unit": "",
+    "solution": "1 base carrée + 4 faces triangulaires = 5 faces.",
+    "hints": ["1 base + les côtés."]
+  },
+  {
+    "id": "esp-ex-6",
+    "chapterId": "vision-espace",
+    "difficulty": "moyen",
+    "question": "Quelle est la forme de la base d'un cylindre ?",
+    "answer": "cercle",
+    "unit": "",
+    "solution": "La base d'un cylindre est un cercle.",
+    "hints": ["Pense à une cannette."]
+  },
+  {
+    "id": "esp-ex-7",
+    "chapterId": "vision-espace",
+    "difficulty": "moyen",
+    "question": "Un prisme à base triangulaire a combien de faces ?",
+    "answer": "5",
+    "unit": "",
+    "solution": "2 bases triangulaires + 3 faces rectangulaires = 5 faces.",
+    "hints": ["2 triangles + 3 rectangles."]
+  },
+  {
+    "id": "esp-ex-8",
+    "chapterId": "vision-espace",
+    "difficulty": "difficile",
+    "question": "Combien d'arêtes a un pavé droit ?",
+    "answer": "12",
+    "unit": "",
+    "solution": "Un pavé droit a 12 arêtes, comme le cube.",
+    "hints": ["Même nombre qu'un cube."]
+  },
+  {
+    "id": "esp-ex-9",
+    "chapterId": "vision-espace",
+    "difficulty": "difficile",
+    "question": "Quel solide obtient-on en empilant des cercles ?",
+    "answer": "cylindre",
+    "unit": "",
+    "solution": "En empilant des cercles, on obtient un cylindre.",
+    "hints": ["Pense à une pile de pièces."]
+  },
+  {
+    "id": "esp-ex-10",
+    "chapterId": "vision-espace",
+    "difficulty": "difficile",
+    "question": "Combien de sommets a une pyramide à base carrée ?",
+    "answer": "5",
+    "unit": "",
+    "solution": "4 sommets de la base + 1 sommet au sommet = 5 sommets.",
+    "hints": ["4 coins de la base + 1 au sommet."]
+  },
+  {
+    "id": "data-ex-1",
+    "chapterId": "gestion-donnees",
+    "difficulty": "facile",
+    "question": "Dans un tableau, Paul a 12 ans et Marie 10 ans. Quelle est la différence d'âge ?",
+    "answer": "2",
+    "unit": "ans",
+    "solution": "12 - 10 = 2 ans.",
+    "hints": ["Soustrais les âges."]
+  },
+  {
+    "id": "data-ex-2",
+    "chapterId": "gestion-donnees",
+    "difficulty": "facile",
+    "question": "Un graphique montre 5 pommes rouges et 3 pommes vertes. Combien de pommes au total ?",
+    "answer": "8",
+    "unit": "pommes",
+    "solution": "5 + 3 = 8 pommes.",
+    "hints": ["Additionne les quantités."]
+  },
+  {
+    "id": "data-ex-3",
+    "chapterId": "gestion-donnees",
+    "difficulty": "facile",
+    "question": "Quelle est la moyenne de 8 et 12 ?",
+    "answer": "10",
+    "unit": "",
+    "solution": "(8 + 12) ÷ 2 = 20 ÷ 2 = 10.",
+    "hints": ["Somme divisée par 2."]
+  },
+  {
+    "id": "data-ex-4",
+    "chapterId": "gestion-donnees",
+    "difficulty": "moyen",
+    "question": "Les notes sont 10, 12, 14, 16. Quelle est la moyenne ?",
+    "answer": "13",
+    "unit": "",
+    "solution": "(10 + 12 + 14 + 16) ÷ 4 = 52 ÷ 4 = 13.",
+    "hints": ["Somme divisée par le nombre de notes."]
+  },
+  {
+    "id": "data-ex-5",
+    "chapterId": "gestion-donnees",
+    "difficulty": "moyen",
+    "question": "Un tableau montre : Lundi 5 absents, Mardi 3, Mercredi 4. Combien au total ?",
+    "answer": "12",
+    "unit": "absents",
+    "solution": "5 + 3 + 4 = 12 absents.",
+    "hints": ["Additionne les valeurs."]
+  },
+  {
+    "id": "data-ex-6",
+    "chapterId": "gestion-donnees",
+    "difficulty": "moyen",
+    "question": "Les températures sont 15°, 18°, 20°. Quelle est la moyenne ?",
+    "answer": "17,67",
+    "unit": "°C",
+    "solution": "(15 + 18 + 20) ÷ 3 = 53 ÷ 3 ≈ 17,67°C.",
+    "hints": ["Somme / nombre de valeurs."]
+  },
+  {
+    "id": "data-ex-7",
+    "chapterId": "gestion-donnees",
+    "difficulty": "moyen",
+    "question": "Dans une classe de 25 élèves, 15 sont des filles. Combien de garçons ?",
+    "answer": "10",
+    "unit": "garçons",
+    "solution": "25 - 15 = 10 garçons.",
+    "hints": ["Soustrais du total."]
+  },
+  {
+    "id": "data-ex-8",
+    "chapterId": "gestion-donnees",
+    "difficulty": "difficile",
+    "question": "Les scores sont 8, 12, 15, 9. Quelle est l'étendue ?",
+    "answer": "7",
+    "unit": "",
+    "solution": "Étendue = max - min = 15 - 8 = 7.",
+    "hints": ["Différence entre le plus grand et le plus petit."]
+  },
+  {
+    "id": "data-ex-9",
+    "chapterId": "gestion-donnees",
+    "difficulty": "difficile",
+    "question": "Un graphique montre 20 réponses dont 12 correctes. Quel est le pourcentage de réponses correctes ?",
+    "answer": "60",
+    "unit": "%",
+    "solution": "(12 ÷ 20) × 100 = 60%.",
+    "hints": ["(Partie / Total) × 100."]
+  },
+  {
+    "id": "data-ex-10",
+    "chapterId": "gestion-donnees",
+    "difficulty": "difficile",
+    "question": "Les valeurs sont 5, 7, 7, 9, 12. Quel est le mode ?",
+    "answer": "7",
+    "unit": "",
+    "solution": "Le mode est la valeur la plus fréquente : 7 (apparaît 2 fois).",
+    "hints": ["La valeur qui revient le plus souvent."]
+  },
+  {
+    "id": "prob-ex-1",
+    "chapterId": "probabilites",
+    "difficulty": "facile",
+    "question": "En lançant une pièce, quelle est la probabilité d'obtenir pile ?",
+    "answer": "1/2",
+    "unit": "",
+    "solution": "Il y a 2 résultats possibles (pile ou face), probabilité = 1/2.",
+    "hints": ["1 chance sur 2."]
+  },
+  {
+    "id": "prob-ex-2",
+    "chapterId": "probabilites",
+    "difficulty": "facile",
+    "question": "Dans un sac de 4 billes rouges et 4 billes bleues, quelle est la probabilité de tirer une rouge ?",
+    "answer": "1/2",
+    "unit": "",
+    "solution": "4 rouges sur 8 total = 4/8 = 1/2.",
+    "hints": ["Nombre de rouges / total."]
+  },
+  {
+    "id": "prob-ex-3",
+    "chapterId": "probabilites",
+    "difficulty": "facile",
+    "question": "En lançant un dé à 6 faces, quelle est la probabilité d'obtenir un 3 ?",
+    "answer": "1/6",
+    "unit": "",
+    "solution": "1 face sur 6 possibles = 1/6.",
+    "hints": ["1 chance sur 6."]
+  },
+  {
+    "id": "prob-ex-4",
+    "chapterId": "probabilites",
+    "difficulty": "moyen",
+    "question": "Quelle est la probabilité d'obtenir un nombre pair en lançant un dé (1 à 6) ?",
+    "answer": "1/2",
+    "unit": "",
+    "solution": "3 nombres pairs (2, 4, 6) sur 6 = 3/6 = 1/2.",
+    "hints": ["Compte les nombres pairs."]
+  },
+  {
+    "id": "prob-ex-5",
+    "chapterId": "probabilites",
+    "difficulty": "moyen",
+    "question": "Dans un sac de 10 billes (3 rouges, 7 bleues), quelle est la probabilité de tirer une bleue ?",
+    "answer": "7/10",
+    "unit": "",
+    "solution": "7 bleues sur 10 total = 7/10.",
+    "hints": ["Nombre de bleues / total."]
+  },
+  {
+    "id": "prob-ex-6",
+    "chapterId": "probabilites",
+    "difficulty": "moyen",
+    "question": "Quelle est la probabilité d'obtenir un nombre supérieur à 4 avec un dé ?",
+    "answer": "1/3",
+    "unit": "",
+    "solution": "2 nombres (5 et 6) sur 6 = 2/6 = 1/3.",
+    "hints": ["Combien de nombres > 4 ?"]
+  },
+  {
+    "id": "prob-ex-7",
+    "chapterId": "probabilites",
+    "difficulty": "moyen",
+    "question": "Un événement certain a une probabilité de combien ?",
+    "answer": "1",
+    "unit": "",
+    "solution": "Un événement certain a une probabilité de 1 (ou 100%).",
+    "hints": ["C'est sûr à 100%."]
+  },
+  {
+    "id": "prob-ex-8",
+    "chapterId": "probabilites",
+    "difficulty": "difficile",
+    "question": "Quelle est la probabilité d'obtenir deux fois pile en lançant deux pièces ?",
+    "answer": "1/4",
+    "unit": "",
+    "solution": "4 résultats possibles (PP, PF, FP, FF), 1 seul donne PP = 1/4.",
+    "hints": ["Liste tous les résultats possibles."]
+  },
+  {
+    "id": "prob-ex-9",
+    "chapterId": "probabilites",
+    "difficulty": "difficile",
+    "question": "Un événement impossible a une probabilité de combien ?",
+    "answer": "0",
+    "unit": "",
+    "solution": "Un événement impossible a une probabilité de 0.",
+    "hints": ["Ça ne peut jamais arriver."]
+  },
+  {
+    "id": "prob-ex-10",
+    "chapterId": "probabilites",
+    "difficulty": "difficile",
+    "question": "Dans un jeu de 52 cartes, quelle est la probabilité de tirer un as ?",
+    "answer": "1/13",
+    "unit": "",
+    "solution": "4 as sur 52 cartes = 4/52 = 1/13.",
+    "hints": ["4 as dans le jeu."]
+  },
+  {
     "id": "prop-ex-1",
+    "chapterId": "proportionnalite",
+    "difficulty": "facile",
+    "question": "Si 2 kg de pommes coûtent 6 €, combien coûte 1 kg ?",
+    "answer": "3",
+    "unit": "€",
+    "solution": "6 ÷ 2 = 3 € le kg.",
+    "hints": ["Divise par 2."]
+  },
+  {
+    "id": "prop-ex-2",
+    "chapterId": "proportionnalite",
+    "difficulty": "facile",
+    "question": "Si 1 stylo coûte 2 €, combien coûtent 5 stylos ?",
+    "answer": "10",
+    "unit": "€",
+    "solution": "2 × 5 = 10 €.",
+    "hints": ["Multiplie par 5."]
+  },
+  {
+    "id": "prop-ex-3",
+    "chapterId": "proportionnalite",
+    "difficulty": "facile",
+    "question": "3 gâteaux coûtent 9 €. Quel est le prix d'un gâteau ?",
+    "answer": "3",
+    "unit": "€",
+    "solution": "9 ÷ 3 = 3 € le gâteau.",
+    "hints": ["Divise le prix total par 3."]
+  },
+  {
+    "id": "prop-ex-4",
     "chapterId": "proportionnalite",
     "difficulty": "moyen",
     "question": "Si 2 kg de pommes coûtent 6 €, combien coûtent 5 kg ?",
@@ -50,13 +1140,163 @@
     "hints": ["Cherche d'abord le prix de 1 kg."]
   },
   {
+    "id": "prop-ex-5",
+    "chapterId": "proportionnalite",
+    "difficulty": "moyen",
+    "question": "Pour faire 4 crêpes, il faut 200 g de farine. Combien pour 10 crêpes ?",
+    "answer": "500",
+    "unit": "g",
+    "solution": "200 ÷ 4 = 50 g par crêpe. 50 × 10 = 500 g.",
+    "hints": ["Calcule pour 1 crêpe d'abord."]
+  },
+  {
+    "id": "prop-ex-6",
+    "chapterId": "proportionnalite",
+    "difficulty": "moyen",
+    "question": "Calcule 25% de 80.",
+    "answer": "20",
+    "unit": "",
+    "solution": "25% = 25/100 = 1/4. 80 ÷ 4 = 20.",
+    "hints": ["25% = 1/4."]
+  },
+  {
+    "id": "prop-ex-7",
+    "chapterId": "proportionnalite",
+    "difficulty": "moyen",
+    "question": "Un article coûte 50 € avec 10% de réduction. Quel est le prix final ?",
+    "answer": "45",
+    "unit": "€",
+    "solution": "10% de 50 = 5 €. Prix final = 50 - 5 = 45 €.",
+    "hints": ["Calcule 10% puis soustrais."]
+  },
+  {
+    "id": "prop-ex-8",
+    "chapterId": "proportionnalite",
+    "difficulty": "difficile",
+    "question": "Une voiture roule à 60 km/h. Quelle distance parcourt-elle en 2h30 ?",
+    "answer": "150",
+    "unit": "km",
+    "solution": "2h30 = 2,5 h. Distance = 60 × 2,5 = 150 km.",
+    "hints": ["Convertis 2h30 en heures décimales."]
+  },
+  {
+    "id": "prop-ex-9",
+    "chapterId": "proportionnalite",
+    "difficulty": "difficile",
+    "question": "Sur une carte à l'échelle 1:100000, 5 cm représentent quelle distance réelle ?",
+    "answer": "5",
+    "unit": "km",
+    "solution": "5 cm × 100000 = 500000 cm = 5000 m = 5 km.",
+    "hints": ["Multiplie par l'échelle puis convertis."]
+  },
+  {
+    "id": "prop-ex-10",
+    "chapterId": "proportionnalite",
+    "difficulty": "difficile",
+    "question": "Calcule 15% de 240.",
+    "answer": "36",
+    "unit": "",
+    "solution": "15% = 15/100. 240 × 15/100 = 240 × 0,15 = 36.",
+    "hints": ["Multiplie par 0,15."]
+  },
+  {
     "id": "info-ex-1",
     "chapterId": "pensee-informatique",
     "difficulty": "facile",
-    "question": "Un robot avance de 5 pas, tourne, puis avance de 5 pas. S'il répète cela 4 fois, combien de pas a-t-il fait au total ?",
+    "question": "Un robot avance de 5 pas, tourne, puis avance de 5 pas. S'il répète cela 4 fois, combien de pas fait-il ?",
     "answer": "40",
     "unit": "pas",
     "solution": "Chaque série fait 5 + 5 = 10 pas. Répété 4 fois : 10 × 4 = 40 pas.",
     "hints": ["Calcule le nombre de pas dans une boucle."]
+  },
+  {
+    "id": "info-ex-2",
+    "chapterId": "pensee-informatique",
+    "difficulty": "facile",
+    "question": "Combien de fois la boucle s'exécute-t-elle : pour i de 1 à 5 ?",
+    "answer": "5",
+    "unit": "fois",
+    "solution": "La boucle s'exécute 5 fois (i = 1, 2, 3, 4, 5).",
+    "hints": ["Compte de 1 à 5."]
+  },
+  {
+    "id": "info-ex-3",
+    "chapterId": "pensee-informatique",
+    "difficulty": "facile",
+    "question": "Si un algorithme dit 'répète 3 fois : ajoute 2', en partant de 0, quel est le résultat ?",
+    "answer": "6",
+    "unit": "",
+    "solution": "0 + 2 + 2 + 2 = 6.",
+    "hints": ["Ajoute 2 trois fois."]
+  },
+  {
+    "id": "info-ex-4",
+    "chapterId": "pensee-informatique",
+    "difficulty": "moyen",
+    "question": "Un robot tourne de 90° à droite 4 fois. De combien a-t-il tourné au total ?",
+    "answer": "360",
+    "unit": "°",
+    "solution": "90 × 4 = 360° (un tour complet).",
+    "hints": ["Multiplie 90 par 4."]
+  },
+  {
+    "id": "info-ex-5",
+    "chapterId": "pensee-informatique",
+    "difficulty": "moyen",
+    "question": "Si un programme double un nombre 3 fois en partant de 2, quel est le résultat ?",
+    "answer": "16",
+    "unit": "",
+    "solution": "2 × 2 = 4, 4 × 2 = 8, 8 × 2 = 16.",
+    "hints": ["Double à chaque étape."]
+  },
+  {
+    "id": "info-ex-6",
+    "chapterId": "pensee-informatique",
+    "difficulty": "moyen",
+    "question": "Combien de pas fait un carré de côté 10 si le robot trace tous les côtés ?",
+    "answer": "40",
+    "unit": "pas",
+    "solution": "4 côtés × 10 pas = 40 pas.",
+    "hints": ["4 côtés dans un carré."]
+  },
+  {
+    "id": "info-ex-7",
+    "chapterId": "pensee-informatique",
+    "difficulty": "moyen",
+    "question": "Un algorithme compte de 2 en 2 : 2, 4, 6, ... Quel est le 5ème nombre ?",
+    "answer": "10",
+    "unit": "",
+    "solution": "2, 4, 6, 8, 10. Le 5ème est 10.",
+    "hints": ["Continue la suite."]
+  },
+  {
+    "id": "info-ex-8",
+    "chapterId": "pensee-informatique",
+    "difficulty": "difficile",
+    "question": "Pour tracer un triangle équilatéral, le robot doit tourner de combien à chaque sommet ?",
+    "answer": "120",
+    "unit": "°",
+    "solution": "360° ÷ 3 = 120° par sommet.",
+    "hints": ["Divise 360 par le nombre de côtés."]
+  },
+  {
+    "id": "info-ex-9",
+    "chapterId": "pensee-informatique",
+    "difficulty": "difficile",
+    "question": "Un algorithme calcule n × 2 + 3. Si n = 7, quel est le résultat ?",
+    "answer": "17",
+    "unit": "",
+    "solution": "7 × 2 + 3 = 14 + 3 = 17.",
+    "hints": ["Multiplie d'abord, puis ajoute."]
+  },
+  {
+    "id": "info-ex-10",
+    "chapterId": "pensee-informatique",
+    "difficulty": "difficile",
+    "question": "Pour tracer un hexagone régulier, le robot tourne de combien à chaque sommet ?",
+    "answer": "60",
+    "unit": "°",
+    "solution": "360° ÷ 6 = 60°.",
+    "hints": ["360 divisé par le nombre de côtés."]
   }
 ]

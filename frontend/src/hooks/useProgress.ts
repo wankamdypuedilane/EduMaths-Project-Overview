@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import exercisesData from "../data/exercises.json";
 
 interface ExerciseProgress {
   exerciseId: string;
@@ -97,6 +98,7 @@ export function useProgress(userId?: string) {
 
       const map = new Map<string, ChapterProgress>();
 
+      // Premier passage : construire la map des exercices tentés
       (data || []).forEach((row: ExerciseProgressRow) => {
         const existingChapter = map.get(row.chapter_id) || {
           chapterId: row.chapter_id,
@@ -115,17 +117,31 @@ export function useProgress(userId?: string) {
           },
         ];
 
-        const completedCount = exercises.filter((ep) => ep.completed).length;
-        const completion = Math.round(
-          (completedCount / exercises.length) * 100,
-        );
-
         map.set(row.chapter_id, {
           ...existingChapter,
           exercises,
-          completion,
+          completion: 0, // On calculera après
         });
       });
+
+      // Deuxième passage : calculer les completions correctement
+      map.forEach((chapterProgress, chapterId) => {
+        const totalExercisesInChapter = exercisesData.filter(
+          (ex: any) => ex.chapterId === chapterId,
+        ).length;
+
+        const completedCount = chapterProgress.exercises.filter(
+          (ep) => ep.completed,
+        ).length;
+
+        chapterProgress.completion =
+          totalExercisesInChapter > 0
+            ? Math.round((completedCount / totalExercisesInChapter) * 100)
+            : 0;
+      });
+
+      setProgress(Array.from(map.values()));
+      setLoading(false);
 
       setProgress(Array.from(map.values()));
       setLoading(false);
@@ -220,12 +236,20 @@ export function useProgress(userId?: string) {
       });
     }
 
+    // Calcul de completion basé sur le nombre TOTAL d'exercices du chapitre
     const completedExercises = chapterProgress.exercises.filter(
       (ep) => ep.completed,
     ).length;
-    chapterProgress.completion = Math.round(
-      (completedExercises / chapterProgress.exercises.length) * 100,
-    );
+
+    // Calculer le vrai total en comptant tous les exercices du JSON
+    const totalExercisesInChapter = exercisesData.filter(
+      (ex: any) => ex.chapterId === chapterId,
+    ).length;
+
+    chapterProgress.completion =
+      totalExercisesInChapter > 0
+        ? Math.round((completedExercises / totalExercisesInChapter) * 100)
+        : 0;
 
     setProgress(newProgress);
 

@@ -2,7 +2,7 @@
   {
     "id": "nombres-entiers-decimaux",
     "title": "Nombres entiers et décimaux",
-    "description": "Apprendre à lire, écrire et comparer les nombres avec virgule.",
+    "description": "Comprendre la valeur de chaque chiffre (unités, dizaines, centaines, dixièmes, centièmes, millièmes) ; décomposer un nombre : 12,345 = 12 + 3/10 + 4/100 + 5/1000 ; lire, écrire, comparer et encadrer ; passer d'une fraction décimale à l'écriture à virgule et inversement ; arrondir, estimer un ordre de grandeur et vérifier la cohérence d'un résultat.",
     "classeIds": ["6eme"],
     "order": 1,
     "icon": "hash",
@@ -11,45 +11,108 @@
   {
     "id": "fractions",
     "title": "Les Fractions",
-    "description": "Comprendre les partages et les quotients.",
+    "description": "Voir la fraction comme partage et comme quotient ; placer une fraction sur une droite graduée ; simplifier par un diviseur commun ; comparer et encadrer ; passer d'une fraction décimale à l'écriture à virgule ; calculer une part k/n d'une quantité ; ajouter ou soustraire des fractions de même dénominateur ; comprendre le sens d'une fraction impropre (>1).",
     "classeIds": ["6eme", "5eme"],
     "order": 2,
     "icon": "divide",
     "color": "red"
   },
   {
-    "id": "aires-perimetres",
-    "title": "Aires et Périmètres",
-    "description": "Calculer la longueur d'un contour et la surface d'une figure.",
-    "classeIds": ["6eme", "5eme", "4eme"],
+    "id": "algebre",
+    "title": "Algèbre",
+    "description": "Utiliser une lettre pour représenter un nombre inconnu ; traduire une phrase en expression numérique/littérale ; appliquer les priorités (parenthèses, multiplications/divisions, additions/soustractions) ; remplacer une lettre par une valeur pour calculer ; résoudre des égalités simples de la forme ax + b = c ; repérer des régularités dans des suites ou des figures et commencer à généraliser.",
+    "classeIds": ["6eme"],
     "order": 3,
+    "icon": "variable",
+    "color": "teal"
+  },
+  {
+    "id": "longueurs",
+    "title": "Les Longueurs",
+    "description": "Maîtriser les unités (mm, cm, dm, m, km) avec tableau de conversion ; estimer un ordre de grandeur ; mesurer et tracer avec règle/compas ; calculer des périmètres : rectangle 2(L + l), carré 4c, cercle 2πr ; résoudre des problèmes de trajets cumulés et d'échelles simples.",
+    "classeIds": ["6eme"],
+    "order": 4,
+    "icon": "ruler",
+    "color": "cyan"
+  },
+  {
+    "id": "aires",
+    "title": "Les Aires",
+    "description": "Utiliser les unités d'aire (m², dm², cm²) et convertir ; connaître les formules : rectangle A = L × l, carré A = c², triangle A = (b × h)/2, disque A = πr² ; relier périmètre et aire ; estimer et comparer des surfaces ; résoudre des problèmes de pavage, carrelage ou peinture.",
+    "classeIds": ["6eme", "5eme", "4eme"],
+    "order": 5,
     "icon": "square",
     "color": "green"
   },
   {
-    "id": "geometrie-plane",
-    "title": "Géométrie Plane",
-    "description": "Étude des droites, segments, angles et du cercle.",
+    "id": "volumes",
+    "title": "Les Volumes",
+    "description": "Reconnaître cube et pavé droit ; utiliser V = L × l × h et V = c³ ; lier volumes (m³, dm³, cm³) et capacités (L, mL) avec 1 L = 1 dm³ = 1000 cm³ ; approcher le volume d'autres solides simples ; résoudre des problèmes de remplissage, contenance et empilement.",
     "classeIds": ["6eme"],
-    "order": 4,
+    "order": 6,
+    "icon": "cube",
+    "color": "amber"
+  },
+  {
+    "id": "temps-durees",
+    "title": "Repérage dans le temps et durées",
+    "description": "Lire une horloge analogique ou numérique ; convertir heures, minutes, secondes (base 60) ; calculer une durée ou retrouver une heure de début/fin ; utiliser le calendrier (mois, jours, années bissextiles) ; estimer un temps de parcours et relier durée, distance, vitesse simple.",
+    "classeIds": ["6eme"],
+    "order": 7,
+    "icon": "clock",
+    "color": "pink"
+  },
+  {
+    "id": "geometrie-plane",
+    "title": "Configurations planes",
+    "description": "Mobiliser le vocabulaire : points, segments, droites, demi-droites ; identifier parallèles et perpendiculaires ; mesurer et construire des angles avec le rapporteur ; connaître les propriétés des triangles (isocèle, rectangle) et des quadrilatères usuels ; cercle : rayon, diamètre, centre ; utiliser équerre et compas ; repérer des axes de symétrie simples.",
+    "classeIds": ["6eme"],
+    "order": 8,
     "icon": "triangle",
     "color": "indigo"
   },
   {
+    "id": "vision-espace",
+    "title": "Vision dans l'espace",
+    "description": "Identifier cubes, pavés, prismes, cylindres, pyramides ; compter faces, arêtes, sommets ; lire et produire des vues de face/côté/haut ; comprendre et utiliser des patrons simples ; relier le volume d'un solide à la surface de son patron.",
+    "classeIds": ["6eme"],
+    "order": 9,
+    "icon": "box",
+    "color": "violet"
+  },
+  {
+    "id": "gestion-donnees",
+    "title": "Organisation et gestion de données",
+    "description": "Lire et compléter des tableaux ; choisir et interpréter un diagramme en barres ou circulaire ; calculer moyenne et étendue ; introduire fréquence et pourcentage simple ; critiquer ou valider une représentation en fonction des données.",
+    "classeIds": ["6eme"],
+    "order": 10,
+    "icon": "chart",
+    "color": "slate"
+  },
+  {
+    "id": "probabilites",
+    "title": "Les Probabilités",
+    "description": "Découvrir le hasard par des jeux (dé, pièce, urne) ; énumérer les issues et les événements ; distinguer événement certain, impossible, équiprobable ; exprimer une probabilité simple en fraction ou pourcentage ; comprendre que la somme des probabilités des issues vaut 1.",
+    "classeIds": ["6eme"],
+    "order": 11,
+    "icon": "dice",
+    "color": "rose"
+  },
+  {
     "id": "proportionnalite",
-    "title": "Proportionnalité",
-    "description": "Utiliser les tableaux et les pourcentages.",
+    "title": "La Proportionnalité",
+    "description": "Repérer un tableau proportionnel (coefficient constant, linéarité) ; utiliser le passage à l'unité et le produit en croix ; manipuler pourcentages et échelles ; traiter des vitesses constantes et lire un graphique y = kx ; vérifier ou invalider la proportionnalité d'une situation.",
     "classeIds": ["6eme", "5eme"],
-    "order": 5,
+    "order": 12,
     "icon": "percent",
     "color": "purple"
   },
   {
     "id": "pensee-informatique",
-    "title": "Pensée Informatique",
-    "description": "Initiation aux algorithmes et à la logique de programmation.",
+    "title": "Pensée informatique",
+    "description": "Décomposer un problème en étapes ; décrire un algorithme en mots ou en pseudo-code ; utiliser des boucles pour répéter des actions ; introduire des instructions conditionnelles simples ; tester, repérer et corriger une erreur (débogage) ; appliquer ces idées à des tracés ou à des suites d'actions.",
     "classeIds": ["6eme"],
-    "order": 6,
+    "order": 13,
     "icon": "code",
     "color": "orange"
   }
