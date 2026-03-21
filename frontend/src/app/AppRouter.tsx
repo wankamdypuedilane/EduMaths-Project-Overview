@@ -17,6 +17,7 @@ import { SolutionPage } from "../pages/learning/SolutionPage";
 
 // Profile pages
 import { ProfilePage } from "../pages/profile/ProfilePage";
+import { AdminDashboard } from "../pages/admin/AdminDashboard";
 
 // Onboarding & Other
 import { SplashPage } from "../pages/SplashPage";
@@ -54,6 +55,7 @@ export function AppRouter() {
       <Route path="/progression" element={<ProgressionPage />} />
       <Route path="/tutor" element={<TutorPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/admin" element={<AdminDashboard />} />
 
       {/* Redirect unknown routes */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calculator, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-import { supabase } from "../../lib/supabaseClient";
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -13,18 +12,6 @@ export function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Fallback: si Supabase signale SIGNED_IN, on avance
-  useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_IN") {
-        console.log("Signup fallback: SIGNED_IN -> navigate /terms");
-        setLoading(false);
-        navigate("/terms");
-      }
-    });
-    return () => sub.subscription.unsubscribe();
-  }, [navigate]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();

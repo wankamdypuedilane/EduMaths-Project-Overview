@@ -12,6 +12,7 @@ interface User {
   email: string;
   classeId: string;
   isFirstLogin: boolean;
+  role: string;
   avatarUrl?: string;
 }
 
@@ -28,6 +29,7 @@ const toUser = (
     email: profile?.email || supabaseUser.email || "",
     classeId: profile?.classe_id || metadata.classeId || "6eme",
     isFirstLogin: Boolean(metadata.isFirstLogin),
+    role: profile?.role || metadata.role || "student",
     avatarUrl: profile?.avatar_url,
   };
 };

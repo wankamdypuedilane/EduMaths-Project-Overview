@@ -8,6 +8,7 @@ import {
   CheckCircle,
   Award,
   Atom,
+  Shield,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useProgress } from "../hooks/useProgress";
@@ -50,6 +51,7 @@ export function DashboardPage() {
   const recentActivities = getRecentActivities();
 
   const isNew = user?.isFirstLogin;
+  const isAdmin = ["admin", "super_admin"].includes(user?.role || "");
 
   return (
     <AppLayout activePage="dashboard">
@@ -143,6 +145,19 @@ export function DashboardPage() {
                 Entraînez-vous maintenant
               </p>
             </button>
+
+            {isAdmin && (
+              <button
+                onClick={() => navigate("/admin")}
+                className="cursor-pointer bg-gradient-to-br from-slate-700 to-slate-900 rounded-xl p-6 text-left text-white hover:shadow-lg transition-all"
+              >
+                <Shield className="w-8 h-8 mb-3" />
+                <h3 className="font-semibold text-lg mb-1">Administration</h3>
+                <p className="text-sm text-slate-200">
+                  Gérer les utilisateurs et les roles
+                </p>
+              </button>
+            )}
           </div>
         </div>
 

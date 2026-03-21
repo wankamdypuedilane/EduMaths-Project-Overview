@@ -7,6 +7,7 @@ import {
   UserCircle,
   LogOut,
   Calculator,
+  Shield,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
@@ -19,6 +20,7 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading } = useAuth();
+  const isAdmin = ["admin", "super_admin"].includes(user?.role || "");
 
   // Gestion de l'état de chargement pour éviter le flash
   if (loading) {
@@ -47,6 +49,9 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
     },
     { id: "tutor", label: "Tuteur IA", icon: MessageSquare, path: "/tutor" },
     { id: "profile", label: "Profil", icon: UserCircle, path: "/profile" },
+    ...(isAdmin
+      ? [{ id: "admin", label: "Admin", icon: Shield, path: "/admin" }]
+      : []),
   ];
 
   const handleLogout = () => {
@@ -80,6 +85,7 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
                 activePage === item.id || location.pathname === item.path;
               return (
                 <button
+                  type="button"
                   key={item.id}
                   onClick={() => navigate(item.path)}
                   className={`w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
@@ -99,6 +105,7 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
         {/* Logout */}
         <div className="p-4 border-t border-gray-200">
           <button
+            type="button"
             onClick={handleLogout}
             className="w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
           >
