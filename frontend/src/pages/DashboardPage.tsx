@@ -55,24 +55,24 @@ export function DashboardPage() {
 
   return (
     <AppLayout activePage="dashboard">
-      <div className="p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        <div className="mb-6 sm:mb-8 flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
               Bonjour, {user?.name.split(" ")[0] || "Étudiant"} ! 👋
             </h1>
-            <div className="flex items-center gap-2">
-              <p className="text-gray-600 italic">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <p className="text-gray-600 italic text-sm sm:text-base">
                 Prêt pour tes exercices de {selectedClass?.label} ?
               </p>
-              <span className="bg-indigo-100 text-indigo-700 text-sm font-semibold px-3 py-1 rounded-full">
+              <span className="w-fit bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold px-3 py-1 rounded-full">
                 Niveau {selectedClass?.label || "6ème"}
               </span>
             </div>
           </div>
           {/* Streak Badge */}
-          <div className="bg-gradient-to-br from-indigo-600 to-purple-600 px-6 py-4 rounded-xl shadow-lg">
+          <div className="w-full sm:w-auto bg-gradient-to-br from-indigo-600 to-purple-600 px-6 py-4 rounded-xl shadow-lg">
             <p className="text-white/80 text-xs text-center uppercase mb-2">
               Série
             </p>
@@ -84,7 +84,7 @@ export function DashboardPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-8">
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center">
@@ -125,7 +125,7 @@ export function DashboardPage() {
         {/* Quick Access */}
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Accès rapide</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               onClick={() => navigate(`/classes/${selectedClassId}/chapters`)}
               className="cursor-pointer bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl p-6 text-left text-white hover:shadow-lg transition-all"
@@ -162,7 +162,7 @@ export function DashboardPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-800">
               Activité récente
