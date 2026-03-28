@@ -59,10 +59,15 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
     navigate("/");
   };
 
+  const isItemActive = (path: string, id: string) =>
+    activePage === id ||
+    location.pathname === path ||
+    location.pathname.startsWith(`${path}/`);
+
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+    <div className="flex h-[100dvh] overflow-hidden bg-gray-50">
+      {/* Sidebar desktop */}
+      <div className="hidden md:flex w-64 bg-white border-r border-gray-200 flex-col">
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <div
@@ -81,8 +86,7 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
           <div className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive =
-                activePage === item.id || location.pathname === item.path;
+              const isActive = isItemActive(item.path, item.id);
               return (
                 <button
                   type="button"
@@ -115,8 +119,60 @@ export function AppLayout({ children, activePage }: AppLayoutProps) {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">{children}</div>
+      <div className="flex-1 min-w-0 min-h-0 flex flex-col">
+        {/* Mobile top bar */}
+        <div className="md:hidden h-16 shrink-0 bg-white border-b border-gray-200 px-4 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+            className="flex items-center gap-2"
+          >
+            <div className="bg-indigo-600 w-8 h-8 rounded-lg flex items-center justify-center">
+              <Calculator className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-base font-bold text-gray-800">EduMaths</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="p-2 rounded-lg text-red-600 hover:bg-red-50"
+            aria-label="Deconnexion"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 min-h-0 overflow-y-auto pb-24 md:pb-0">
+          {children}
+        </div>
+
+        {/* Mobile bottom navigation */}
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+          <div className="grid grid-cols-5">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = isItemActive(item.path, item.id);
+              return (
+                <button
+                  type="button"
+                  key={item.id}
+                  onClick={() => navigate(item.path)}
+                  className={`py-2 px-1 flex flex-col items-center gap-1 text-xs ${
+                    isActive
+                      ? "text-indigo-600"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      </div>
     </div>
   );
 }
