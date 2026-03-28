@@ -1,0 +1,30 @@
+name: Frontend CD
+
+on:
+  workflow_run:
+    workflows: ["Frontend CI"]
+    types:
+      - completed
+    branches:
+      - master
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Copy build to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -r frontend/build ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/frontend-build
+
+      - name: Restart Nginx on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} 'sudo systemctl restart nginx'
