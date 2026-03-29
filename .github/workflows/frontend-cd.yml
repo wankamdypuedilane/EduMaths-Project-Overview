@@ -31,6 +31,9 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Vérifier le contenu du build
+        run: ls -l frontend/build
+
       - name: Copy build to EC2
         run: |
           scp -o StrictHostKeyChecking=no -r frontend/build ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/frontend-build
