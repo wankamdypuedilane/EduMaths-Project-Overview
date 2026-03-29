@@ -1,0 +1,347 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=1.6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{longtable}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue!60!black,
+  linkcolor=blue!60!black
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.15em,topsep=0.15em}
+
+\definecolor{mainblue}{HTML}{0A4A84}
+\definecolor{lineblue}{HTML}{2E6FA3}
+
+\titleformat{\section}
+  {\large\bfseries\color{mainblue}}
+  {}
+  {0em}
+  {}
+  [\vspace{-0.4em}\color{lineblue}\rule{\linewidth}{0.6pt}\vspace{-0.3em}]
+
+\newcommand{\cvheading}[1]{
+  \vspace{0.25em}
+  {\centering\colorbox{mainblue}{\parbox{0.97\linewidth}{\centering\color{white}\bfseries #1}}\par}
+  \vspace{0.25em}
+}
+
+\begin{document}
+
+{\centering
+  {\LARGE\bfseries FICHE DE R\'EVISION -- ENTRETIEN TECHNIQUE}\par
+  \vspace{0.2em}
+  {\large\bfseries Projet EduMaths : Vercel $\rightarrow$ AWS (HTTP) $\rightarrow$ AWS (HTTPS)}\par
+  \vspace{0.2em}
+  \small
+  Dilane Junior WANKAM \;\textbullet\; Mars 2026
+  \par
+}
+
+\cvheading{OBJECTIF DE CETTE FICHE}
+
+Cette fiche r\'esume l'industrialisation du d\'eploiement d'EduMaths en 3 phases :
+\textbf{(1) Vercel}, \textbf{(2) migration AWS EC2 + Nginx en HTTP}, \textbf{(3) s\'ecurisation HTTPS avec Let's Encrypt}.
+Elle inclut aussi le \textbf{pipeline CI/CD GitHub Actions} utilis\'e actuellement.
+
+\section{1. VUE D'ENSEMBLE ARCHITECTURE}
+
+\textbf{Avant (phase initiale)}
+\begin{itemize}
+  \item Frontend React/Vite h\'eberg\'e sur Vercel.
+  \item Build Vite (sortie dans \texttt{build/}) via configuration \texttt{vercel.json}.
+  \item Variables d'environnement frontend pour Supabase.
+\end{itemize}
+
+\textbf{Apr\`es migration (phase actuelle)}
+\begin{itemize}
+  \item Frontend statique construit par GitHub Actions puis copi\'e sur AWS EC2.
+  \item Nginx sert les fichiers depuis \texttt{/var/www/edumaths/current}.
+  \item Domaine personnalis\'e point\'e vers l'instance EC2 (DNS).
+  \item Certificat TLS install\'e avec Certbot (HTTPS actif).
+\end{itemize}
+
+\section{2. PHASE 1 -- D\'EPLOIEMENT VERCEL}
+
+\textbf{Pourquoi Vercel au d\'ebut ?}
+\begin{itemize}
+  \item Mise en ligne rapide pour valider le produit.
+  \item Int\'egration simple avec un projet Vite.
+  \item Id\'eal pour prototyper avant une infrastructure personnalis\'ee.
+\end{itemize}
+
+\textbf{Configuration cl\'e utilis\'ee :}
+\begin{itemize}
+  \item \texttt{framework: vite}
+  \item \texttt{buildCommand: npm run build}
+  \item \texttt{outputDirectory: build}
+\end{itemize}
+
+\textbf{Commandes utilis\'ees (phase Vercel) et pourquoi}
+\begin{itemize}
+  \item \texttt{npm ci} --- Installer les d\'ependances de mani\`ere reproductible.
+  \item \texttt{npm run build} --- Produire les fichiers statiques optimis\'es pour la prod.
+  \item \texttt{vercel --prod} (ou d\'eploiement via UI Vercel) --- Publier rapidement une version accessible.
+\end{itemize}
+
+\textbf{Pourquoi ces commandes ?}
+\begin{itemize}
+  \item \texttt{npm ci} est pr\'ef\'er\'e \`a \texttt{npm install} en CI car il respecte strictement le lockfile.
+  \item \texttt{npm run build} valide que l'app est d\'eployable avant publication.
+  \item Le d\'eploiement Vercel permet un time-to-market rapide au d\'ebut du projet.
+\end{itemize}
+
+\section{3. PHASE 2 -- MIGRATION AWS EC2 + NGINX (HTTP)}
+
+\textbf{Objectif de migration}
+\begin{itemize}
+  \item Contr\^oler finement l'infrastructure et le d\'eploiement.
+  \item Se pr\'eparer \`a un pipeline CI/CD plus proche des pratiques production.
+\end{itemize}
+
+\textbf{Etapes techniques r\'ealis\'ees}
+\begin{itemize}
+  \item Provision d'une instance EC2 Linux.
+  \item Installation et configuration de Nginx en reverse/static server.
+  \item D\'eploiement du build frontend dans \texttt{/var/www/edumaths/current}.
+  \item Test en HTTP pour valider la cha\^ine : build $\rightarrow$ transfert $\rightarrow$ service web.
+\end{itemize}
+
+\textbf{Points de vigilance expliquables en entretien}
+\begin{itemize}
+  \item Permissions Linux (propri\'etaire + droits fichiers) pour que Nginx lise correctement les assets.
+  \item Validation de conf Nginx avant reload (\texttt{nginx -t}).
+  \item S\'eparation entre r\'epertoire temporaire de release et r\'epertoire servi en production.
+\end{itemize}
+
+\textbf{Commandes utilis\'ees (phase AWS HTTP) et pourquoi}
+\begin{itemize}
+  \item \texttt{ssh -i <cle.pem> ec2-user@<ip-ec2>} --- Se connecter au serveur pour le configurer.
+  \item \texttt{sudo mkdir -p /var/www/edumaths/current} --- Cr\'eer la racine de publication des fichiers statiques.
+  \item \texttt{sudo cp -r /tmp/edumaths-release/* /var/www/edumaths/current/} --- Promouvoir la release dans le dossier servi.
+  \item \texttt{sudo chown -R ec2-user:ec2-user /var/www/edumaths/current} --- Corriger le propri\'etaire pour les op\'erations de d\'eploiement.
+  \item \texttt{sudo find /var/www/edumaths/current -type d -exec chmod 755 \{\} \;} --- Droits corrects sur les dossiers.
+  \item \texttt{sudo find /var/www/edumaths/current -type f -exec chmod 644 \{\} \;} --- Droits corrects sur les fichiers statiques.
+  \item \texttt{sudo nginx -t} --- Valider la configuration Nginx avant red\'emarrage/reload.
+  \item \texttt{sudo systemctl reload nginx} --- Recharger Nginx sans coupure majeure.
+  \item \texttt{systemctl status nginx} --- Contr\^oler l'\'etat du service apr\`es d\'eploiement.
+\end{itemize}
+
+\textbf{Pourquoi ces commandes ?}
+\begin{itemize}
+  \item Garantir une mise en production s\^ure (test conf avant reload).
+  \item Eviter les erreurs 403/404 li\'ees \`a des permissions incorrectes.
+  \item Maintenir un process de livraison propre : transfert en temporaire puis promotion.
+\end{itemize}
+
+\section{4. PHASE 3 -- PASSAGE EN HTTPS (CERTBOT)}
+
+\textbf{Pr\'erequis}
+\begin{itemize}
+  \item Domaine reli\'e \`a l'IP publique EC2 (A records).
+  \item Nginx op\'erationnel et accessible sur HTTP.
+\end{itemize}
+
+\textbf{Mise en place}
+\begin{itemize}
+  \item Obtention d'un certificat Let's Encrypt via Certbot.
+  \item Activation TLS dans la conf Nginx.
+  \item Redirection HTTP $\rightarrow$ HTTPS pour imposer le chiffrement.
+\end{itemize}
+
+\textbf{B\'en\'efices techniques}
+\begin{itemize}
+  \item Chiffrement des donn\'ees en transit (confidentialit\'e/int\'egrit\'e).
+  \item Confiance navigateur (pas d'alerte de s\'ecurit\'e).
+  \item Base n\'ecessaire pour toute application web de production.
+\end{itemize}
+
+\textbf{Commandes utilis\'ees (phase HTTPS) et pourquoi}
+\begin{itemize}
+  \item \texttt{nslookup edumaths-app.fr} --- V\'erifier que le domaine pointe vers la bonne IP publique.
+  \item \texttt{nslookup www.edumaths-app.fr} --- M\^eme contr\^ole pour le sous-domaine \texttt{www}.
+  \item \texttt{sudo certbot --nginx -d edumaths-app.fr -d www.edumaths-app.fr} --- Demander et installer automatiquement le certificat TLS.
+  \item \texttt{sudo nginx -t} --- Revalider la conf apr\`es intervention Certbot.
+  \item \texttt{sudo systemctl reload nginx} --- Appliquer la configuration HTTPS active.
+\end{itemize}
+
+\textbf{Pourquoi ces commandes ?}
+\begin{itemize}
+  \item Sans DNS correct, Let's Encrypt ne peut pas valider le domaine.
+  \item L'option \texttt{--nginx} automatise la config SSL et r\'eduit les erreurs manuelles.
+  \item Le test + reload finalisent le passage en production HTTPS de mani\`ere fiable.
+\end{itemize}
+
+\section{5. PIPELINE CI/CD ACTUEL (GITHUB ACTIONS)}
+
+\subsection*{5.1 Workflow CI : \texttt{frontend-ci.yml}}
+\textbf{D\'eclenchement}
+\begin{itemize}
+  \item Sur \texttt{pull\_request} vers \texttt{master}
+  \item Sur \texttt{push} vers \texttt{master}
+\end{itemize}
+
+\textbf{Job build (Ubuntu + Node 20)}
+\begin{itemize}
+  \item Checkout du code
+  \item \texttt{npm ci}
+  \item \texttt{npm run lint}
+  \item \texttt{npm test}
+  \item \texttt{npm run build}
+\end{itemize}
+
+\textbf{R\^ole}
+\begin{itemize}
+  \item Emp\^echer les r\'egressions de qualit\'e avant fusion.
+  \item Valider que l'application est construisible avant tout d\'eploiement.
+\end{itemize}
+
+\textbf{Commandes utilis\'ees (CI) et pourquoi}
+\begin{itemize}
+  \item \texttt{npm ci} --- Build reproductible en environnement GitHub Actions.
+  \item \texttt{npm run lint} --- D\'etecter les erreurs de style/qualit\'e avant merge.
+  \item \texttt{npm test} --- V\'erifier le comportement fonctionnel.
+  \item \texttt{npm run build} --- S'assurer que la version est techniquement d\'eployable.
+\end{itemize}
+
+\subsection*{5.2 Workflow CD : \texttt{deploy-ec2.yml}}
+\textbf{D\'eclenchement}
+\begin{itemize}
+  \item Automatique via \texttt{workflow\_run} si \texttt{Frontend CI} est \textbf{success} sur \texttt{master}
+  \item Manuel possible via \texttt{workflow\_dispatch}
+\end{itemize}
+
+\textbf{S\'equence de d\'eploiement}
+\begin{itemize}
+  \item Build frontend avec variables Supabase inject\'ees depuis secrets GitHub.
+  \item Upload des artefacts (\texttt{frontend/build/*}) vers \texttt{/tmp/edumaths-release} (SCP).
+  \item Promotion release : copie vers \texttt{/var/www/edumaths/current}.
+  \item Durcissement permissions + test Nginx + reload service.
+\end{itemize}
+
+\textbf{S\'ecurit\'e et robustesse}
+\begin{itemize}
+  \item Cl\'es SSH et secrets stock\'es dans GitHub Secrets (pas dans le repo).
+  \item Concurrency group : un seul d\'eploiement actif \`a la fois.
+  \item Condition explicite : d\'eploiement seulement si la CI est verte.
+\end{itemize}
+
+\textbf{Commandes internes du CD (SSH script) et pourquoi}
+\begin{itemize}
+  \item \texttt{set -e} --- Arr\^eter le script au premier \`echec pour \`eviter un \`etat partiellement d\'eploy\'e.
+  \item \texttt{sudo rm -rf /var/www/edumaths/current/*} --- Nettoyer l'ancienne release.
+  \item \texttt{sudo cp -r /tmp/edumaths-release/* /var/www/edumaths/current/} --- Activer la nouvelle version.
+  \item \texttt{sudo nginx -t \&\& sudo systemctl reload nginx} --- Contr\^ole de coh\'erence puis activation.
+  \item \texttt{rm -rf /tmp/edumaths-release} --- Nettoyage du r\'epertoire temporaire.
+\end{itemize}
+
+\section{6. SECRETS ET VARIABLES CRITIQUES}
+
+\begin{tabularx}{\linewidth}{>{\bfseries}l X}
+EC2\_HOST & Adresse de l'instance EC2 cible \\
+EC2\_USER & Utilisateur SSH sur EC2 (ex: \texttt{ec2-user}) \\
+EC2\_SSH\_KEY & Cl\'e priv\'ee SSH utilis\'ee par GitHub Actions \\
+VITE\_SUPABASE\_URL & URL du projet Supabase \\
+VITE\_SUPABASE\_ANON\_KEY & Cl\'e publique anon Supabase pour le frontend \\
+\end{tabularx}
+
+\section{7. CE QUE JE DOIS SAVOIR EXPLIQUER JEUDI}
+
+\textbf{1) Pourquoi Vercel puis AWS ?}
+\begin{itemize}
+  \item Vercel pour aller vite au d\'ebut ; AWS pour contr\^ole infra, apprentissage DevOps et pipeline sur mesure.
+\end{itemize}
+
+\textbf{2) Pourquoi s\'eparer CI et CD ?}
+\begin{itemize}
+  \item CI = qualit\'e du code ; CD = livraison en production.
+  \item Le CD ne s'ex\'ecute que si la CI a valid\'e (gate de qualit\'e).
+\end{itemize}
+
+\textbf{3) Comment limiter les risques en d\'eploiement ?}
+\begin{itemize}
+  \item PR obligatoires + checks CI + review humaine.
+  \item Validation Nginx avant reload.
+  \item Permissions ma\^itris\'ees et release temporaire avant promotion.
+\end{itemize}
+
+\textbf{4) Pourquoi HTTPS est indispensable ?}
+\begin{itemize}
+  \item Protection des donn\'ees en transit, confiance utilisateur, standard de production.
+\end{itemize}
+
+\textbf{5) En cas d'incident prod, premi\`eres v\'erifications ?}
+\begin{itemize}
+  \item Status workflow GitHub Actions.
+  \item Contenu d\'eploy\'e dans \texttt{/var/www/edumaths/current}.
+  \item \texttt{sudo nginx -t} puis logs Nginx/systemd.
+  \item Validit\'e DNS/certificat TLS si probl\`eme d'acc\`es HTTPS.
+\end{itemize}
+
+\section{8. MINI SCRIPT DE PR\'ESENTATION (60-90 SECONDES)}
+
+\textit{``J'ai d'abord mis EduMaths en ligne sur Vercel pour valider rapidement le produit. Ensuite, j'ai migr\'e vers AWS EC2 avec Nginx pour gagner en contr\^ole infrastructure et mettre en place un vrai process DevOps. J'ai d\'eploy\'e une version HTTP pour valider toute la cha\^ine de livraison, puis j'ai activ\'e HTTPS avec Certbot pour s\'ecuriser le trafic. Aujourd'hui, j'ai un pipeline GitHub Actions en deux \`etapes : CI (lint, tests, build) puis CD automatique vers EC2 uniquement si la CI est verte. C\^ot\'e gouvernance, les merges passent par Pull Request avec revue et checks obligatoires, ce qui r\'eduit les r\'egressions en production.''}
+
+\section{9. COMMANDES UTILES A RETENIR}
+
+\begin{itemize}
+  \item Build local frontend : \texttt{npm run build}
+  \item Tester conf Nginx : \texttt{sudo nginx -t}
+  \item Recharger Nginx : \texttt{sudo systemctl reload nginx}
+  \item V\'erifier statut Nginx : \texttt{systemctl status nginx}
+  \item Certbot (exemple) : \texttt{sudo certbot --nginx -d edumaths-app.fr -d www.edumaths-app.fr}
+\end{itemize}
+
+\section{10. JOURNAL CHRONOLOGIQUE (COMMANDES + INTENTION)}
+
+\begin{longtable}{>{\bfseries}p{0.18\linewidth}p{0.33\linewidth}p{0.42\linewidth}}
+Etape & Commande & Pourquoi on l'a utilis\'ee \\
+\hline
+Validation build local & \texttt{npm ci ; npm run build} & V\'erifier que le frontend est publiable avant tout changement d'h\'ebergeur. \\
+Mise en ligne rapide & \texttt{vercel --prod} (ou UI) & Obtenir une version en ligne imm\'ediate pour valider le produit. \\
+Migration vers EC2 & \texttt{ssh -i <cle.pem> ec2-user@<ip>} & Administrer directement l'instance Linux cible. \\
+Pr\'eparation r\'epertoire cible & \texttt{sudo mkdir -p /var/www/edumaths/current} & Cr\'eer l'emplacement standard servi par Nginx. \\
+Promotion release & \texttt{sudo cp -r /tmp/edumaths-release/* /var/www/edumaths/current/} & Basculer la nouvelle release en production. \\
+Contr\^ole config web & \texttt{sudo nginx -t} & Eviter d'appliquer une configuration invalide en prod. \\
+Activation web server & \texttt{sudo systemctl reload nginx} & Recharger la conf sans red\'emarrage brutal du service. \\
+Contr\^ole DNS & \texttt{nslookup edumaths-app.fr} & Confirmer que le nom de domaine pointe bien sur l'EC2. \\
+Contr\^ole DNS www & \texttt{nslookup www.edumaths-app.fr} & Confirmer la coh\'erence entre racine et sous-domaine. \\
+Activation HTTPS & \texttt{sudo certbot --nginx -d edumaths-app.fr -d www.edumaths-app.fr} & Installer le certificat TLS et configurer Nginx automatiquement. \\
+CI qualit\'e continue & \texttt{npm run lint ; npm test ; npm run build} & Bloquer les r\'egressions avant fusion sur \texttt{master}. \\
+CD automatis\'e & \texttt{workflow\_run} + script SSH du workflow & D\'eployer sur EC2 uniquement apr\`es succ\`es CI. \\
+\end{longtable}
+
+\section{11. QUESTIONS D'ENTRETIEN SUR LES COMMANDES (REPONSES COURTES)}
+
+\textbf{Pourquoi \texttt{npm ci} au lieu de \texttt{npm install} ?}
+Parce que \texttt{npm ci} est d\'eterministe en CI et garantit exactement les versions du \texttt{package-lock.json}.
+
+\textbf{Pourquoi \texttt{nginx -t} avant reload ?}
+Pour \`eviter de casser la prod avec une conf invalide ; on valide d'abord, on active ensuite.
+
+\textbf{Pourquoi d\'eployer dans \texttt{/tmp} puis copier vers \texttt{/var/www/...} ?}
+Pour isoler l'upload de la zone servie en prod et rendre la promotion plus propre.
+
+\textbf{Pourquoi DNS avant Certbot ?}
+Let's Encrypt doit v\'erifier que le domaine pointe vers le serveur qui demande le certificat.
+
+\textbf{Pourquoi s\'eparer CI et CD ?}
+CI valide la qualit\'e, CD livre ; cette s\'eparation r\'eduit les risques et am\'eliore la gouvernance.
+
+\vspace{0.2em}
+\textbf{Lien projet :} \href{https://edumaths-app.fr}{https://edumaths-app.fr}
+
+\end{document}

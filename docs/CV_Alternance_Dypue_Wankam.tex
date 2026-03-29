@@ -1,0 +1,105 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=1.3cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue!60!black,
+  linkcolor=blue!60!black
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.15em}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em,topsep=0.08em}
+
+\definecolor{mainblue}{HTML}{0A4A84}
+\definecolor{lineblue}{HTML}{2E6FA3}
+
+\titleformat{\section}
+  {\large\bfseries\color{mainblue}}
+  {}
+  {0em}
+  {}
+  [\vspace{-0.35em}\color{lineblue}\rule{\linewidth}{0.6pt}\vspace{-0.25em}]
+
+\newcommand{\cvheading}[1]{
+  \vspace{0.2em}
+  {\centering\colorbox{mainblue}{\parbox{0.97\linewidth}{\centering\color{white}\bfseries #1}}\par}
+  \vspace{0.2em}
+}
+
+\begin{document}
+
+{\centering
+  {\LARGE\bfseries Dilane Junior WANKAM}\par
+  \vspace{0.3em}
+  \small
+  \href{https://www.linkedin.com/in/dilane-wankam}{LinkedIn}
+  \;\textbullet\;
+  \href{https://github.com/wankamdypuedilane}{GitHub}
+  \;\textbullet\;
+  Brest (mobile France)
+  \;\textbullet\;
+  07\,54\,82\,36\,07
+  \;\textbullet\;
+  \href{mailto:wankamdypuedilane@gmail.com}{wankamdypuedilane@gmail.com}
+  \par
+}
+
+\cvheading{RECHERCHE ALTERNANCE : Apprenti Ingénieur DevOps / Cloud \quad \textbullet \quad 12 mois \quad \textbullet \quad Septembre 2026}
+
+\textbf{Profil} Étudiant ingénieur (ENIB) avec une base solide en développement web et une orientation DevOps/Cloud.
+Mise en production réelle d'une application avec CI/CD, DNS, HTTPS/TLS et gouvernance Git.
+\textbf{Objectif :} contribuer à la fiabilité, l'automatisation et la qualité de livraison d'applications web.
+
+\section{COMPÉTENCES TECHNIQUES}
+\begin{itemize}
+  \item \textbf{DevOps / Cloud :} AWS EC2, Linux, Nginx, DNS, HTTPS/TLS (Let's Encrypt, Certbot), notions IAM/VPC.
+  \item \textbf{CI/CD \& Qualité :} GitHub Actions (CI + CD), protection de \texttt{master}, Pull Request avec revue obligatoire.
+  \item \textbf{Développement \& Data :} React, TypeScript, Vite, API REST, Supabase (Auth \& Database), PostgreSQL.
+  \item \textbf{En cours d'apprentissage :} Docker, Terraform, Kubernetes, monitoring (CloudWatch / Grafana).
+\end{itemize}
+
+\section{PROJETS TECHNIQUES MAJEURS}
+
+\textbf{EduMaths \textbar\ Industrialisation DevOps d'une application web} \hfill \textit{AWS EC2, Nginx, GitHub Actions, Supabase}
+\begin{itemize}
+  \item \textbf{Application en ligne :} \href{https://edumaths-app.fr}{edumaths-app.fr}
+  \item 2 environnements gérés : déploiement initial Vercel puis migration vers AWS EC2 (Nginx).
+  \item Mise en production complète : domaine personnalisé, DNS configuré, HTTPS/TLS actif.
+  \item Pipeline CI/CD en 2 workflows GitHub Actions : build automatique puis déploiement EC2.
+  \item 100\% des merges sur \texttt{master} via Pull Request approuvée avec checks CI obligatoires.
+\end{itemize}
+
+\textbf{Gouvernance Git \& qualité de livraison} \hfill \textit{GitHub, CI/CD, Revue de code}
+\begin{itemize}
+  \item Processus standardisé : feature branch $\rightarrow$ Pull Request $\rightarrow$ CI $\rightarrow$ revue $\rightarrow$ merge.
+  \item Réduction du risque de régression par validation automatique + revue humaine avant production.
+\end{itemize}
+
+\section{FORMATION}
+\begin{tabularx}{\linewidth}{>{\bfseries}l X r}
+2025 -- 2027 & Cycle Ingénieur (4ème année) -- Spécialisation Informatique / Web & ENIB, Brest \\
+2021 -- 2024 & Licence en Mécatronique (mention Bien) & \\
+2020 & Baccalauréat Scientifique -- Série C (mention Bien) & \\
+\end{tabularx}
+\textit{Parcours : de la mécatronique vers l'ingénierie web, avec une approche rigoureuse de la production et de la fiabilité.}
+
+\section{SAVOIR-ÊTRE \& LANGUES}
+\begin{itemize}
+  \item \textbf{Savoir-être :} Autonome, rigoureux, culture d'amélioration continue, bon relationnel en équipe.
+  \item \textbf{Langues :} Français (maternel), anglais technique (lecture de documentation, résolution de problèmes).
+  \item \textbf{Centres d'intérêt :} Veille DevOps/Cloud et sécurité web (TLS/certificats), football, basket.
+\end{itemize}
+
+\end{document}
